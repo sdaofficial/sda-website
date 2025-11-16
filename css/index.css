@@ -634,7 +634,7 @@
     font-size: 110px;
   }
   .quote-text p {
-    font-size: 17px;
+    font-size: 16px;
     line-height: 26px;
   }
 
@@ -780,7 +780,7 @@
     margin: 40px 0;
   }
   .quote-ctn {
-    padding: 12px 48px;
+    padding: 12px 12px;
   }
   .quote-mark {
     font-size: 100px;
@@ -794,8 +794,8 @@
     right: 20px;
   }
   .quote-text p {
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 14px;
+    line-height: 20px;
   }
 
   /* Goals Section */
@@ -817,6 +817,7 @@
     grid-column: 1;
   }
   .goals-image {
+    width: 100%;
     height: 300px;
   }
   .goals-image-left,
@@ -870,6 +871,11 @@
   /* Team Section */
   .team-section {
     margin: 60px 0 40px;
+  }
+  .team-heading-ctn .zap-icon {
+    top: 90%;
+    left: 50%;
+    transform: translateX(-50%);
   }
   .team-heading {
     font-size: 32px;

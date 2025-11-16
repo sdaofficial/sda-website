@@ -34,7 +34,7 @@ function createEventCard(event, index) {
 
   card.innerHTML = `
     <div class="event-card-image">
-      <img src="${event.image}" alt="${event.heading}">
+      <img src="${event.image}" alt="${event.heading}" loading="lazy" decoding="async">
     </div>
     <div class="event-card-content">
       <h3 class="event-card-heading">${event.heading}</h3>
@@ -87,6 +87,8 @@ function openEventModal(event) {
   if (modal && modalImage && modalHeading && modalDescription) {
     modalImage.src = event.image;
     modalImage.alt = event.heading;
+    modalImage.loading = 'eager';
+    modalImage.decoding = 'async';
     modalHeading.textContent = event.heading;
     modalDescription.innerHTML = event.description;
 

@@ -105,12 +105,12 @@ function createTeamMemberCard(member) {
   
   memberCard.innerHTML = `
     <div class="team-member-image">
-      <img src="${member.image}" alt="${member.name}">
+      <img src="${member.image}" alt="${member.name}" loading="lazy" decoding="async">
     </div>
     <h3 class="team-member-name">${member.name}</h3>
     <p class="team-member-title">${member.title}</p>
     <a href="${member.linkedin}" class="team-member-linkedin" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
-      <img src="resources/images/icons/linkedin.svg" alt="LinkedIn">
+      <img src="resources/images/icons/linkedin.svg" alt="LinkedIn" loading="lazy" decoding="async">
     </a>
   `;
   
