@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0 maximum-scale=1">
+  <title>Join Us - SDA - Sustainable Development Advocate</title>
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/join-us.css">
+</head>
+<body>
+  <section class="hero-section">
+    <div class="hero-overlay">
+      <h1 class="hero-heading">Creating a Difference, <br />Experience Change</h1>
+    </div>
+  </section>
+
+  <!-- Join Us Section -->
+  <section class="section join-us-section">
+    <div class="join-us-ctn">
+      <div>
+        <p class="join-us-subheading">Join us</p>
+        <h2 class="join-us-heading">Become a Member of SDA</h2>
+        <p class="join-us-description">
+          To join the Sustainable Development Advocate University of Lagos, applicants must demonstrate a commitment to sustainable development principles. Basic requirements include being a student of the University of Lagos , and completion of the online application form. Applicants are expected to undergo an interim class which upon completion would submit essays on various topics outlining their passion for sustainable development and their goals within the field. Successful candidates will be selected based on their participation during the classes and alignment with the SDA's mission as communicated in their submitted essays.
+        </p>
+        <a href="#" class="join-us-btn">Become a member</a>
+      </div>
+      <div class="join-us-image">
+        <img src="resources/images/home--sda-goals-1.png" alt="SDA Community">
+      </div>
+    </div>
+  </section>
+
+  <!-- Events Section -->
+  <section class="section events-section">
+    <div class="events-header">
+      <div class="events-heading-ctn">
+        <h2 class="events-heading">Our Events</h2>
+        <img src="resources/images/icons/zap-2.svg" alt="zap icon">
+      </div>
+      <div class="events-sort">
+        <label for="events-sort-select" class="events-sort-label">Sort by:</label>
+        <div class="events-sort-wrapper">
+          <select id="events-sort-select" class="events-sort-select" style="display: none;">
+            <option value="recent">Recent</option>
+            <option value="alphabetical">Alphabetical</option>
+          </select>
+          <div class="events-dropdown" id="eventsDropdown">
+            <button class="events-dropdown-button" type="button" aria-haspopup="listbox" aria-expanded="false">
+              <span class="events-dropdown-selected">Recent</span>
+              <img src="resources/images/icons/chevron-down.svg" alt="" class="events-dropdown-icon">
+            </button>
+            <ul class="events-dropdown-menu" role="listbox">
+              <li class="events-dropdown-option" role="option" data-value="recent" aria-selected="true">Recent</li>
+              <li class="events-dropdown-option" role="option" data-value="alphabetical" aria-selected="false">Alphabetical</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="events-grid" id="eventsGrid">
+    </div>
+  </section>
+
+  <!-- Event Modal -->
+  <div class="event-modal" id="eventModal">
+    <div class="event-modal-backdrop" onclick="closeEventModal()"></div>
+    <div class="event-modal-content">
+      <button class="event-modal-close" onclick="closeEventModal()" aria-label="Close modal">
+        <img src="resources/images/icons/close.svg" alt="Close">
+      </button>
+      <div class="event-modal-body">
+        <div class="event-modal-image">
+          <img id="modalEventImage" src="" alt="">
+        </div>
+        <div class="event-modal-text">
+          <h2 id="modalEventHeading" class="event-modal-heading"></h2>
+          <p id="modalEventDescription" class="event-modal-description"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  <section class="section cta-section">
+    <div class="cta-card">
+      <div class="cta-content">
+        <p class="cta-subheading">Be in contact</p>
+        <h2 class="cta-heading">Creating a Cleaner Environment for All</h2>
+        <p class="cta-description">
+          Have an question, collaborate or speak further, we are just one click away. Let's create an healthy environment together!!!
+        </p>
+        <a href="/#contact" class="cta-button">Contact us</a>
+      </div>
+      <div class="cta-image">
+        <img src="resources/images/home--sda-goals-1.png" alt="SDA Community">
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer placeholder -->
+  <div class="footer-placeholder"></div>
+
+  <script src="modules.js"></script>
+  <script src="index.js"></script>
+  <script src="join-us.js"></script>
+</body>
+</html>
+
