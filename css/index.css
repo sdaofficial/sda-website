@@ -818,7 +818,7 @@
   }
   .goals-image {
     width: 100%;
-    height: 300px;
+    height: auto;
   }
   .goals-image-left,
   .goals-image-right {
