@@ -1,0 +1,36 @@
+@import url('/fonts/satoshi/css/satoshi.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  line-height: 24px;
+}
+
+/* Horizontal padding utility shared by home sections that use `section` + page blocks */
+.section {
+  padding: 40px 80px;
+}
+
+@media (max-width: 1024px) {
+  .section {
+    padding: 30px 50px;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 12px 24px;
+  }
+}
