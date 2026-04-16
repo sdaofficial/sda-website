@@ -1,6 +1,6 @@
-# SDA - Sustainable Development Advocate
+# SDA - Sustainable Development Advocates
 
-This website showcases the mission, events, team members, and joining information of the Sustainable Development Advocate organization at the University of Lagos.
+This website showcases the mission, events, team members, and joining information of the Sustainable Development Advocates organization at the University of Lagos.
 
 ## Technologies Used
 
@@ -67,4 +67,4 @@ Satoshi is loaded from `public/fonts/satoshi/css/satoshi.css`. Add the font file
 - Instagram: [@sdaunilag](https://instagram.com/sdaunilag)
 - Twitter: [@sdaunilag](https://twitter.com/sdaunilag)
 - LinkedIn: [SDA Unilag](https://www.linkedin.com/company/sdaunilag)
-- YouTube: [Sustainable Development Advocate](https://www.youtube.com/@sustainabledevelopmentadvo7259)
+- YouTube: [Sustainable Development Advocates](https://www.youtube.com/@sustainabledevelopmentadvo7259)
