@@ -4,9 +4,7 @@ import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import eventsFile from '@/data/events.json';
 
-type EventItem = (typeof eventsFile.events)[number];
-
-function sortEvents(events: EventItem[], sortBy: string) {
+function sortEvents(events, sortBy) {
   const sorted = [...events];
   switch (sortBy) {
     case 'recent':
@@ -31,18 +29,18 @@ const modalDescExtras =
   "[&_span.event-description-list-item]:flex [&_span.event-description-list-item]:items-start [&_span.event-description-list-item]:gap-2.5 [&_span.event-description-list-item]:pl-2.5 [&_span.event-description-list-item]:before:content-['•']";
 
 export function JoinUsEvents() {
-  const [events, setEvents] = useState<EventItem[]>(() => sortEvents(eventsFile.events, 'recent'));
-  const [modalEvent, setModalEvent] = useState<EventItem | null>(null);
+  const [events, setEvents] = useState(() => sortEvents(eventsFile.events, 'recent'));
+  const [modalEvent, setModalEvent] = useState(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [sortBy, setSortBy] = useState<'recent' | 'alphabetical'>('recent');
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const modalContentRef = useRef<HTMLDivElement>(null);
+  const [sortBy, setSortBy] = useState('recent');
+  const dropdownRef = useRef(null);
+  const modalContentRef = useRef(null);
 
   const closeModal = useCallback(() => {
     setModalEvent(null);
   }, []);
 
-  const openModal = useCallback((event: EventItem) => {
+  const openModal = useCallback((event) => {
     setModalEvent(event);
     requestAnimationFrame(() => {
       modalContentRef.current?.scrollTo({ top: 0 });
@@ -59,7 +57,7 @@ export function JoinUsEvents() {
   }, [modalEvent]);
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
+    const onKey = (e) => {
       if (e.key === 'Escape') {
         closeModal();
         setDropdownOpen(false);
@@ -70,8 +68,8 @@ export function JoinUsEvents() {
   }, [closeModal]);
 
   useEffect(() => {
-    const onDocClick = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+    const onDocClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
         setDropdownOpen(false);
       }
     };
@@ -79,7 +77,7 @@ export function JoinUsEvents() {
     return () => document.removeEventListener('click', onDocClick);
   }, []);
 
-  const onSortChange = (value: 'recent' | 'alphabetical') => {
+  const onSortChange = (value) => {
     setSortBy(value);
     setEvents(sortEvents(eventsFile.events, value));
     setDropdownOpen(false);
@@ -109,7 +107,7 @@ export function JoinUsEvents() {
                 id="events-sort-select"
                 className="hidden"
                 value={sortBy}
-                onChange={(e) => onSortChange(e.target.value as 'recent' | 'alphabetical')}
+                onChange={(e) => onSortChange(e.target.value)}
               >
                 <option value="recent">Recent</option>
                 <option value="alphabetical">Alphabetical</option>
@@ -131,8 +129,8 @@ export function JoinUsEvents() {
                     } else if (e.key === 'ArrowDown') {
                       e.preventDefault();
                       setDropdownOpen(true);
-                      const first = dropdownRef.current?.querySelector<HTMLElement>('[data-dropdown-option]');
-                      first?.focus();
+                      const first = dropdownRef.current?.querySelector('[data-dropdown-option]');
+                      if (first instanceof HTMLElement) first.focus();
                     }
                   }}
                 >
@@ -163,7 +161,8 @@ export function JoinUsEvents() {
                         onSortChange('recent');
                       } else if (e.key === 'ArrowDown') {
                         e.preventDefault();
-                        (e.currentTarget.nextElementSibling as HTMLElement | null)?.focus();
+                        const next = e.currentTarget.nextElementSibling;
+                        if (next instanceof HTMLElement) next.focus();
                       } else if (e.key === 'Escape') {
                         setDropdownOpen(false);
                         dropdownRef.current?.querySelector('button')?.focus();
@@ -185,7 +184,8 @@ export function JoinUsEvents() {
                         onSortChange('alphabetical');
                       } else if (e.key === 'ArrowUp') {
                         e.preventDefault();
-                        (e.currentTarget.previousElementSibling as HTMLElement | null)?.focus();
+                        const prev = e.currentTarget.previousElementSibling;
+                        if (prev instanceof HTMLElement) prev.focus();
                       } else if (e.key === 'Escape') {
                         setDropdownOpen(false);
                         dropdownRef.current?.querySelector('button')?.focus();
@@ -263,8 +263,8 @@ export function JoinUsEvents() {
   );
 }
 
-function EventCard({ event, index, onOpen }: { event: EventItem; index: number; onOpen: () => void }) {
-  const descRef = useRef<HTMLParagraphElement>(null);
+function EventCard({ event, index, onOpen }) {
+  const descRef = useRef(null);
   const [showReadMore, setShowReadMore] = useState(false);
 
   useEffect(() => {
@@ -283,7 +283,7 @@ function EventCard({ event, index, onOpen }: { event: EventItem; index: number; 
       role="button"
       tabIndex={0}
       onClick={(e) => {
-        if ((e.target as HTMLElement).closest('a')) return;
+        if (e.target instanceof Element && e.target.closest('a')) return;
         onOpen();
       }}
       onKeyDown={(e) => {

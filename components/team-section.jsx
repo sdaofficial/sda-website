@@ -5,19 +5,17 @@ import Link from 'next/link';
 import { useCallback, useLayoutEffect, useRef, useState } from 'react';
 import teamData from '@/data/team-members.json';
 
-type TabKey = keyof typeof teamData;
-
-const TABS: TabKey[] = ['founding', 'executives', 'active'];
+const TABS = ['founding', 'executives', 'active'];
 
 export function TeamSection() {
-  const [currentTab, setCurrentTab] = useState<TabKey>('executives');
-  const [indices, setIndices] = useState<Record<TabKey, number>>({
+  const [currentTab, setCurrentTab] = useState('executives');
+  const [indices, setIndices] = useState({
     founding: 0,
     executives: 0,
     active: 0,
   });
   const [isNarrow, setIsNarrow] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef(null);
 
   useLayoutEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)');
@@ -30,10 +28,10 @@ export function TeamSection() {
   const applyTransform = useCallback(() => {
     const root = containerRef.current;
     if (!root) return;
-    const carousel = root.querySelector<HTMLElement>(`.team-carousel[data-tab="${currentTab}"]`);
+    const carousel = root.querySelector(`.team-carousel[data-tab="${currentTab}"]`);
     if (!carousel) return;
 
-    const members = carousel.querySelectorAll<HTMLElement>('.team-member');
+    const members = carousel.querySelectorAll('.team-member');
     const itemsPerView = isNarrow ? 2 : 4;
     const gap = isNarrow ? 16 : 24;
 
@@ -58,7 +56,7 @@ export function TeamSection() {
   }, [applyTransform]);
 
   useLayoutEffect(() => {
-    let t: ReturnType<typeof setTimeout>;
+    let t;
     const onResize = () => {
       clearTimeout(t);
       t = setTimeout(() => {
@@ -92,7 +90,7 @@ export function TeamSection() {
     }
   };
 
-  const selectTab = (tab: TabKey) => {
+  const selectTab = (tab) => {
     setCurrentTab(tab);
   };
 

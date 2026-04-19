@@ -9,16 +9,6 @@ const compat = new FlatCompat({
   baseDirectory: __dirname,
 });
 
-const eslintConfig = [
-  ...compat.extends('next/core-web-vitals', 'next/typescript'),
-  {
-    files: ['next-env.d.ts'],
-    rules: {
-      // Next may re-add `/// <reference path="./.next/types/routes.d.ts" />` on build; path refs
-      // cannot be expressed as imports. Route types are already in tsconfig "include".
-      '@typescript-eslint/triple-slash-reference': 'off',
-    },
-  },
-];
+const eslintConfig = [...compat.extends('next/core-web-vitals')];
 
 export default eslintConfig;

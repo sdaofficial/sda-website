@@ -10,13 +10,11 @@ const HEADER_PAGES = {
   home: { label: 'Home', path: '/' },
   joinUs: { label: 'Get involved', path: '/join-us' },
   contact: { label: 'Contact Us', path: '/#contact' },
-} as const;
+};
 
-type HeaderPageId = keyof typeof HEADER_PAGES;
+const HEADER_NAV_ORDER = ['home', 'joinUs', 'contact'];
 
-const HEADER_NAV_ORDER: HeaderPageId[] = ['home', 'joinUs', 'contact'];
-
-function getActivePageId(pathname: string): HeaderPageId | null {
+function getActivePageId(pathname) {
   const current = pathname || '/';
   for (const id of HEADER_NAV_ORDER) {
     const { path } = HEADER_PAGES[id];
@@ -44,7 +42,7 @@ export function SiteHeader() {
     };
   }, [menuOpen]);
 
-  const navLinkClass = (pageId: HeaderPageId, variant: 'desktop' | 'mobile') => {
+  const navLinkClass = (pageId, variant) => {
     const active = activePageId === pageId;
     if (variant === 'desktop') {
       return [
@@ -60,7 +58,7 @@ export function SiteHeader() {
 
   return (
     <>
-      <header className="header sticky top-0 z-10 bg-white px-20 py-4 shadow-[0_2px_10px_rgba(19,19,19,0.1)] max-lg:px-10 max-md:px-6">
+      <header className="header sticky top-0 z-50 bg-white px-20 py-4 shadow-[0_2px_10px_rgba(19,19,19,0.1)] max-lg:px-10 max-md:px-6">
         <div className="header-ctn mx-auto flex max-w-full items-center justify-between">
           <div className="logo">
             <Link

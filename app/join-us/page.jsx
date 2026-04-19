@@ -1,9 +1,8 @@
-import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { JoinUsEvents } from '@/components/join-us-events';
 
-export const metadata: Metadata = {
+export const metadata = {
   title: 'Join Us',
   description: 'Become a member of SDA and explore our events at the University of Lagos.',
 };

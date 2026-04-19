@@ -1,18 +1,21 @@
 import Image from 'next/image';
+import { PageSectionBlock } from '@/components/page-section-block';
 import { TeamSection } from '@/components/team-section';
+import { getPageById } from '@/lib/contentful';
 
-export default function HomePage() {
+const HOME_PAGE_ENTRY_ID = '617p1qDzJLE2ZQt4KkQeYd';
+
+export default async function HomePage() {
+  const pageById = await getPageById(HOME_PAGE_ENTRY_ID);
+  const sectionItems = pageById?.pageSectionsCollection?.items?.filter(Boolean) ?? [];
+  const heroSection =
+    sectionItems.find((s) =>
+      /hero|split|intro|imageright|imageleft|imagetop|imagebottom|noimage/i.test(s.sectionLayout ?? '')
+    ) ?? sectionItems[0];
+
   return (
     <>
-      <section className="hero-section relative flex h-[650px] items-center justify-center bg-[url('/images/home--hero.png')] bg-cover bg-center bg-no-repeat max-lg:h-[500px]">
-        <div className="pointer-events-none absolute inset-0 bg-gray-800-alpha" aria-hidden />
-        <div className="hero-overlay relative z-[1] max-w-[768px] px-4 text-center text-white">
-          <p className="hero-subheading text-gray-100 max-lg:text-base">About SDA</p>
-          <h1 className="hero-heading text-[62px] font-bold leading-tight max-lg:text-5xl max-md:text-[2rem]">
-            Making a Positive Impact on the Environment
-          </h1>
-        </div>
-      </section>
+      <PageSectionBlock section={heroSection} />
 
       <section className="section history-section mt-[100px] max-lg:mt-20 max-md:mt-[60px]">
         <div className="history-ctn grid grid-cols-2 items-start gap-8 max-lg:gap-7 max-md:grid-cols-1 max-md:gap-5">

@@ -1,5 +1,3 @@
-import type { Config } from 'tailwindcss';
-
 /**
  * Single source of truth for colors and fonts.
  * Legacy CSS uses `theme('colors.primary.600')` and `@apply font-sans` — no :root variables.
@@ -19,7 +17,8 @@ const fontSans = [
   'sans-serif',
 ];
 
-const config: Config = {
+/** @type {import('tailwindcss').Config} */
+const config = {
   content: ['./app/**/*.{js,ts,jsx,tsx,mdx}', './components/**/*.{js,ts,jsx,tsx,mdx}'],
   corePlugins: {
     preflight: false,
@@ -49,15 +48,15 @@ const config: Config = {
           '300-alpha': '#c3c3c31a',
           200: '#cbcbcb',
           100: '#eeeeee',
-          50: '#fdfdfd',
+          50: '#F9F9F9',
         },
         brown: {
           1: '#0a0101',
           2: '#c3c3c3',
           alpha: '#c3c3c31a',
         },
-        black: '#000000',
-        white: '#ffffff',
+        black: '#0A0101',
+        white: '#FFFFFF',
       },
       fontFamily: {
         sans: fontSans,
