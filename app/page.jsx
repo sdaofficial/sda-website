@@ -7,7 +7,7 @@ const HOME_PAGE_ENTRY_ID = '617p1qDzJLE2ZQt4KkQeYd';
 
 export default async function HomePage() {
   const pageById = await getPageById(HOME_PAGE_ENTRY_ID);
-  const sectionItems = pageById?.pageSectionsCollection?.items?.filter(Boolean) ?? [];
+  const sectionItems = pageById?.sectionsCollection?.items?.filter(Boolean) ?? [];
   const heroSection =
     sectionItems.find((s) =>
       /hero|split|intro|imageright|imageleft|imagetop|imagebottom|noimage/i.test(s.sectionLayout ?? '')

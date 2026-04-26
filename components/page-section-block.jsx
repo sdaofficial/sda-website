@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import { ImageSlot } from './image-slot';
+import { SectionStatistics } from './section-statistics';
 
 function cn(...parts) {
   return parts.filter(Boolean).join(' ');
@@ -29,7 +30,6 @@ const themeContent = {
   light: {
     heading: 'text-gray-900',
     body: 'text-gray-600',
-    statsStyle: 'text-gray-900 bg-gray-50',
     emptyImage: 'bg-gray-200/80 text-gray-500',
     imageRing: 'ring-black/5',
     skeleton: 'bg-gray-200/90',
@@ -37,7 +37,6 @@ const themeContent = {
   dark: {
     heading: 'text-gray-50',
     body: 'text-gray-300',
-    statsStyle: 'text-white bg-gray-800',
     emptyImage: 'bg-gray-800 text-gray-400',
     imageRing: 'ring-white/10',
     skeleton: 'bg-gray-700/90',
@@ -78,11 +77,13 @@ function SectionSkeleton() {
   );
 }
 
-function CtaLink({ label, url }) {
+function CtaLink({ label, url, openInNewTab }) {
   if (!label) return null;
   const btn =
     'inline-block rounded-full bg-primary px-8 py-3.5 text-base font-bold text-white no-underline transition-colors hover:bg-primary-400';
   if (url) {
+    const target = openInNewTab ? '_blank' : '_self';
+
     if (url.startsWith('/')) {
       return (
         <Link href={url} className={btn}>
@@ -91,7 +92,7 @@ function CtaLink({ label, url }) {
       );
     }
     return (
-      <a href={url} className={btn} target="_blank" rel="noopener noreferrer">
+      <a href={url} className={btn} target={target} rel="noopener noreferrer">
         {label}
       </a>
     );
@@ -104,13 +105,13 @@ export function PageSectionBlock({ section }) {
     return <SectionSkeleton theme="light" />;
   }
 
-  const layout = section?.sectionLayout;
-  const theme = section?.sectionTheme;
-  const t = themeContent[theme];
-  const highlightWords = section?.sectionHeadingHighlights;
-  const stats = section?.sectionStatisticsCollection?.items ?? [];
-  const images = (section?.sectionImagesCollection?.items ?? []).filter((img) => Boolean(img?.url));
-  const primaryCta = section?.sectionCtAsCollection?.items?.[0];
+  const layout = section?.layout;
+  const theme = section?.theme;
+  const themeStyle = themeContent[theme];
+  const highlightWords = section?.headingHighlights;
+  const stats = section?.statisticsCollection?.items ?? [];
+  const images = (section?.imagesCollection?.items ?? []).filter((img) => Boolean(img?.imageAsset?.url));
+  const primaryCta = section?.ctAsCollection?.items?.[0];
 
   const contentBlock = (
     <div
@@ -123,9 +124,9 @@ export function PageSectionBlock({ section }) {
       )}
     >
 
-      {section?.sectionEyebrow ? (
+      {section?.eyebrow ? (
         <p className="text-sm font-bold tracking-[0.12em] text-primary">
-          {section?.sectionEyebrow}
+          {section?.eyebrow}
         </p>
       ) : null}
 
@@ -133,50 +134,29 @@ export function PageSectionBlock({ section }) {
         id={section?.internalName}
         className={cn(
           'mb-4 text-4xl font-bold leading-[1.12] tracking-tight max-md:text-[2rem] max-md:leading-tight lg:text-[2.75rem]',
-          t.heading
+          themeStyle.heading
         )}
       >
         {renderHeading({
-          heading: section?.sectionHeading,
+          heading: section?.heading,
           highlightWords: highlightWords ?? [],
           highlightClassName: 'text-primary'
         })}
       </h2>
 
-      {section?.sectionBody ? (
-        <p className={cn('mb-8 max-w-xl text-lg leading-7 max-md:text-base max-md:leading-6 font-light', t.body)}>
-          {section?.sectionBody}
+      {section?.body ? (
+        <p className={cn('mb-8 max-w-xl text-lg leading-7 max-md:text-base max-md:leading-6 font-light', themeStyle.body)}>
+          {section?.body}
         </p>
       ) : null}
 
-      {primaryCta?.ctaLabel ? (
+      {primaryCta?.label ? (
         <div className="mb-10">
-          <CtaLink label={primaryCta?.ctaLabel} url={primaryCta?.ctaUrl} />
+          <CtaLink label={primaryCta?.label} url={primaryCta?.url} openInNewTab={primaryCta?.openInNewTab} />
         </div>
       ) : null}
 
-      {stats.length > 0 ? (
-        <div
-          className={cn(
-            'flex flex-wrap gap-6 max-md:gap-4',
-            t.statsTop
-          )}
-        >
-          {stats.map(stat => (
-            <div
-              key={stat?.statLabel}
-              className={cn(
-                'flex items-center py-8 rounded-xl min-w-[100px] flex-1 flex-col gap-1 max-md:min-w-[80px]', t.statsStyle
-              )}
-            >
-              <span className={cn('text-3xl font-bold leading-none max-md:text-2xl', t.statValue)}>
-                {stat?.statValue}
-              </span>
-              <span className={cn('text-sm', t.statLabel)}>{stat?.statLabel}</span>
-            </div>
-          ))}
-        </div>
-      ) : null}
+      {stats.length > 0 ? <SectionStatistics stats={stats} /> : null}
     </div>
   );
 
@@ -224,6 +204,7 @@ export function PageSectionBlock({ section }) {
         {contentBlock}
       </div>
     );
+
     const mediaCol = (
       <div
         className={cn(
@@ -235,8 +216,9 @@ export function PageSectionBlock({ section }) {
         {mediaBlock}
       </div>
     );
+
     sectionInner = (
-      <div className="mx-auto grid w-full max-w-[1200px] grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <div className="w-full grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
         {mediaCol}
         {contentCol}
       </div>

@@ -1,10 +1,15 @@
+'use client';
+
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 const CARD_FAN = [
   { rotate: -5, z: 30 },
   { rotate: -21, z: 20 },
   { rotate: 12, z: 10 },
 ];
+
+const SHUFFLE_INTERVAL_MS = 2000;
 
 function SingleImage({ img, priority }) {
   return (
@@ -22,27 +27,49 @@ function SingleImage({ img, priority }) {
 }
 
 function FanImages({ images }) {
+  const [zStackShift, setZStackShift] = useState(0);
+
+  const n = images.length;
+
+  useEffect(() => {
+    if (n < 2) return undefined;
+
+    const reducedMotion =
+      typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reducedMotion) return undefined;
+
+    const intervalId = window.setInterval(() => {
+      setZStackShift((s) => (s + 1) % n);
+    }, SHUFFLE_INTERVAL_MS);
+
+    return () => {
+      window.clearInterval(intervalId);
+    };
+  }, [n]);
+
   return (
-    <div className="relative mx-auto h-[min(440px,72vw)] w-full max-w-[420px] max-md:mb-4 flex items-center justify-center">
-      {images.map((img, index) => {
-        const fan = CARD_FAN[index % CARD_FAN?.length];
+    <div className="relative lg:ms-auto h-[min(440px,72vw)] w-full max-w-[420px] max-md:mb-4 flex items-center justify-center">
+      {images.map((img, slotIndex) => {
+        const fan = CARD_FAN[slotIndex % CARD_FAN.length];
+        const zTier = CARD_FAN[(slotIndex + zStackShift) % n];
 
         return (
           <div
-            key={`${img?.url}-${index}`}
-            className="absolute right-[50px] top-0 w-[82%] max-w-[300px] overflow-hidden rounded-2xl shadow-lg ring-1 max-md:w-[88%] aspect-[4/5] -translate-x-[50%]"
+            key={slotIndex}
+            className="absolute right-[50px] top-0 w-[82%] max-w-[300px] overflow-hidden rounded-2xl shadow-lg shadow-gray-800/50 max-md:w-[88%] aspect-[4/5]"
             style={{
-              zIndex: fan.z,
+              zIndex: zTier.z,
               transform: `rotate(${fan.rotate}deg)`,
             }}
           >
             <Image
-              src={img?.url}
-              alt={img?.description}
+              src={img?.imageAsset?.url}
+              alt={img?.altText}
               fill
               className="object-cover object-center"
               sizes="(max-width: 1024px) 72vw, 300px"
-              priority={index === 0}
+              priority={slotIndex === 0}
             />
           </div>
         );
@@ -77,7 +104,7 @@ function GalleryGrid({ images }) {
 // layout is also a prop, and it can be noImage, singleImage, fanImages, or galleryGrid
 export function ImageSlot({ images, priority }) {
   const imgArray = Array.isArray(images)
-    ? images?.filter((img) => Boolean(img?.url))
+    ? images?.filter((img) => Boolean(img?.imageAsset?.url))
     : [];
 
   switch (imgArray?.length) {
