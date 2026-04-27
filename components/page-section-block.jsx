@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { ImageSlot } from './image-slot';
 import { SectionStatistics } from './section-statistics';
+import { SectionVideoEmbed } from './section-video-embed';
 
 function cn(...parts) {
   return parts.filter(Boolean).join(' ');
@@ -24,12 +25,14 @@ const renderHeading = ({ heading, highlightWords, highlightClassName }) => {
 const themeShell = {
   light: 'bg-white text-black',
   dark: 'bg-black text-white',
+  gray: 'bg-gray-50 text-gray-900',
 };
 
 const themeContent = {
   light: {
     heading: 'text-gray-900',
     body: 'text-gray-600',
+    subBlockBody: 'text-gray-600',
     emptyImage: 'bg-gray-200/80 text-gray-500',
     imageRing: 'ring-black/5',
     skeleton: 'bg-gray-200/90',
@@ -37,10 +40,19 @@ const themeContent = {
   dark: {
     heading: 'text-gray-50',
     body: 'text-gray-300',
+    subBlockBody: 'text-gray-300',
     emptyImage: 'bg-gray-800 text-gray-400',
     imageRing: 'ring-white/10',
     skeleton: 'bg-gray-700/90',
   },
+  gray: {
+    heading: 'text-gray-900',
+    body: 'text-gray-600',
+    subBlockBody: 'text-gray-600',
+    emptyImage: 'bg-gray-200/80 text-gray-500',
+    imageRing: 'ring-black/5',
+    skeleton: 'bg-gray-200/90',
+  }
 };
 
 function SectionSkeleton() {
@@ -92,9 +104,9 @@ function CtaLink({ label, url, openInNewTab }) {
       );
     }
     return (
-      <a href={url} className={btn} target={target} rel="noopener noreferrer">
+      <Link href={url} className={btn} target={target} rel="noopener noreferrer" aria-label={label}>
         {label}
-      </a>
+      </Link>
     );
   }
   return <span className={btn}>{label}</span>;
@@ -110,8 +122,13 @@ export function PageSectionBlock({ section }) {
   const themeStyle = themeContent[theme];
   const highlightWords = section?.headingHighlights;
   const stats = section?.statisticsCollection?.items ?? [];
+  const subBlocks = (section?.subBlocksCollection?.items ?? []).filter((b) => b?.title?.trim() || b?.body?.trim());
   const images = (section?.imagesCollection?.items ?? []).filter((img) => Boolean(img?.imageAsset?.url));
   const primaryCta = section?.ctAsCollection?.items?.[0];
+  const videoUrlRaw = section?.videoUrl;
+  const videoUrl = typeof videoUrlRaw === 'string' ? videoUrlRaw.trim() : '';
+  const hasVideo = Boolean(videoUrl);
+  const videoCover = images[0];
 
   const contentBlock = (
     <div
@@ -150,6 +167,33 @@ export function PageSectionBlock({ section }) {
         </p>
       ) : null}
 
+      {subBlocks.length > 0 ? (
+        <div
+          className={cn(
+            'mb-10 flex max-w-2xl flex-col gap-10 max-md:gap-8',
+            !section?.body && 'mt-6'
+          )}
+        >
+          {subBlocks.map((block, index) => (
+            <div key={index}>
+              {block.title?.trim() ? (
+                <h3 className="mb-3 text-4xl font-semibold tracking-tight text-primary max-md:text-lg">{block.title.trim()}</h3>
+              ) : null}
+              {block.body?.trim() ? (
+                <p
+                  className={cn(
+                    'text-xl leading-[1.75] max-md:text-base max-md:leading-7',
+                    themeStyle.subBlockBody
+                  )}
+                >
+                  {block.body.trim()}
+                </p>
+              ) : null}
+            </div>
+          ))}
+        </div>
+      ) : null}
+
       {primaryCta?.label ? (
         <div className="mb-10">
           <CtaLink label={primaryCta?.label} url={primaryCta?.url} openInNewTab={primaryCta?.openInNewTab} />
@@ -170,14 +214,33 @@ export function PageSectionBlock({ section }) {
         layout === 'imageBottomShadow' && 'w-full justify-center'
       )}
     >
-      <ImageSlot images={images} theme={theme} layout={layout} priority />
+      {hasVideo ? (
+        <SectionVideoEmbed
+          videoUrl={videoUrl}
+          videoCaption={section?.videoCaption}
+          videoSubcaption={section?.videoSubcaption}
+          coverImageUrl={videoCover?.imageAsset?.url}
+          coverAlt={videoCover?.altText ?? videoCover?.caption ?? ''}
+          priority
+        />
+      ) : (
+        <ImageSlot images={images} priority />
+      )}
     </div>
   );
 
   let sectionInner;
 
   if (layout === 'noImage') {
-    sectionInner = <div className="mx-auto w-full max-w-[1200px]">{contentBlock}</div>;
+    sectionInner =
+      hasVideo ? (
+        <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center gap-12">
+          {mediaBlock}
+          {contentBlock}
+        </div>
+      ) : (
+        <div className="mx-auto w-full max-w-[1200px]">{contentBlock}</div>
+      );
   } else if (layout === 'imageTop') {
     sectionInner = (
       <div className="mx-auto flex w-full max-w-[1200px] flex-col items-center gap-12">
@@ -227,12 +290,16 @@ export function PageSectionBlock({ section }) {
 
   return (
     <section
-      className={cn('border-b border-gray-200 section page-section-block', themeShell[theme])}
+      className={cn(
+        'border-b border-gray-200 section page-section-block',
+        themeShell[theme],
+        subBlocks.length > 0 && 'relative'
+      )}
       aria-labelledby={section?.internalName}
       data-layout={layout}
       data-theme={theme}
     >
-      {sectionInner}
+      <div className={cn(subBlocks.length > 0 && 'relative z-[1]')}>{sectionInner}</div>
     </section>
   );
 }

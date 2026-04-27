@@ -28,6 +28,7 @@ const config = {
       colors: {
         primary: {
           DEFAULT: '#db5026',
+          900: '#160e0e',
           600: '#c54822',
           500: '#db5026',
           '500-alpha': '#db50261a',

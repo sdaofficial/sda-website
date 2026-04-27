@@ -20,7 +20,7 @@ body {
 
 /* Horizontal padding utility shared by home sections that use `section` + page blocks */
 .section {
-  padding: 40px 80px;
+  padding: 80px;
 }
 
 @media (max-width: 1024px) {

@@ -15,8 +15,8 @@ function SingleImage({ img, priority }) {
   return (
     <div className="relative mx-auto w-full max-w-[300px] overflow-hidden rounded-2xl shadow-lg ring-1 max-md:max-w-[88%] aspect-[4/5]">
       <Image
-        src={img?.url}
-        alt={img?.description}
+        src={img?.imageAsset?.url ?? img?.url}
+        alt={img?.caption}
         fill
         className="object-cover object-center"
         sizes="(max-width: 1024px) 88vw, 300px"
