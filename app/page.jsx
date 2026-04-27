@@ -4,6 +4,7 @@ import { TeamSection } from '@/components/team-section';
 import { UpcomingEventsSection } from '@/components/upcoming-events-section';
 import { getPageById } from '@/lib/contentful';
 import { TestimonialsSection } from '@/components/testimonials-section';
+import { PartnershipsSection } from '@/components/partnerships-section';
 
 const HOME_PAGE_ENTRY_ID = '617p1qDzJLE2ZQt4KkQeYd';
 
@@ -18,12 +19,15 @@ export default async function HomePage() {
           section?.__typename === 'EventsSectionBlock' || section?.eventsCollection != null;
         const isTestimonials =
           section?.__typename === 'TestimonialBlock' || section?.testimonialsCollection != null;
-        
+        const isPartnerships =
+          section?.__typename === 'PartnershipsBlock' || section?.partnershipsCollection != null;
 
         return isEvents ? (
           <UpcomingEventsSection key={section.internalName ?? 'events'} section={section} />
         ) : isTestimonials ? (
           <TestimonialsSection key={section.internalName ?? 'testimonials'} section={section} />
+        ) : isPartnerships ? (
+          <PartnershipsSection key={section.internalName ?? 'partnerships'} section={section} />
         ) : (
           <PageSectionBlock key={section.internalName} section={section} />
         );

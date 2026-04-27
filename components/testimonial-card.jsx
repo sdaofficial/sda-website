@@ -30,7 +30,7 @@ export default function TestimonialCard({ testimonial }) {
               &ldquo;
             </span>
             <blockquote className="m-0">
-              <p className="text-pretty font-sans text-base font-light leading-relaxed text-gray-100 md:text-xs">
+              <p className="text-pretty font-sans text-xs font-light leading-relaxed text-gray-100 line-clamp-6">
                 {testimonial?.body}
               </p>
               <footer className="mt-2 font-sans text-base font-bold text-white">
