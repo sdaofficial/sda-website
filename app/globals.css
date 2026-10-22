@@ -34,3 +34,97 @@ body {
     padding: 12px 24px;
   }
 }
+
+html.motion [data-anim] {
+  opacity: 0;
+}
+
+html.motion [data-anim='rise'] {
+  transform: translate3d(0, 28px, 0);
+}
+
+html.motion [data-anim='drop'] {
+  transform: translate3d(0, -20px, 0);
+}
+
+html.motion [data-anim='left'] {
+  transform: translate3d(-36px, 0, 0);
+}
+
+html.motion [data-anim='right'] {
+  transform: translate3d(36px, 0, 0);
+}
+
+html.motion [data-anim='scale'] {
+  transform: scale(0.92);
+}
+
+html.motion [data-anim='zoom'] {
+  transform: scale(1.08);
+}
+
+html.motion [data-anim='pop'] {
+  transform: scale(0.78);
+}
+
+html.motion [data-motion].is-in [data-anim] {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 0.7s ease var(--d, 0ms),
+    transform 0.85s cubic-bezier(0.16, 1, 0.3, 1) var(--d, 0ms),
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+html.motion [data-motion].is-in [data-anim='zoom'] {
+  transition-duration: 1.15s;
+}
+
+html.motion [data-motion].is-in [data-anim='pop'] {
+  transition-timing-function: ease, cubic-bezier(0.22, 1.2, 0.36, 1);
+}
+
+html.motion [data-motion='team'] .team-member:nth-child(1) {
+  --d: 90ms;
+}
+
+html.motion [data-motion='team'] .team-member:nth-child(2) {
+  --d: 170ms;
+}
+
+html.motion [data-motion='team'] .team-member:nth-child(3) {
+  --d: 250ms;
+}
+
+html.motion [data-motion='team'] .team-member:nth-child(4) {
+  --d: 330ms;
+}
+
+html.motion [data-motion='team'] .team-member:nth-child(n + 5) {
+  --d: 400ms;
+}
+
+html.motion [data-motion='speech'] .speech-letter p:nth-child(1) {
+  --d: 380ms;
+}
+
+html.motion [data-motion='speech'] .speech-letter p:nth-child(2) {
+  --d: 480ms;
+}
+
+html.motion [data-motion='speech'] .speech-letter p:nth-child(3) {
+  --d: 580ms;
+}
+
+html.motion [data-motion='speech'] .speech-letter p:nth-child(n + 4) {
+  --d: 680ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.motion [data-anim] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

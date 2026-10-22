@@ -13,9 +13,12 @@ export default function JoinUsPage() {
 
   return (
     <div>
-      <section className="relative flex h-[650px] items-center justify-center bg-[url('/images/join-us--hero.png')] bg-cover bg-center bg-no-repeat max-lg:h-[500px]">
+      <section
+        data-motion="hero"
+        className="relative flex h-[650px] items-center justify-center bg-[url('/images/join-us--hero.png')] bg-cover bg-center bg-no-repeat max-lg:h-[500px]"
+      >
         <div className="pointer-events-none absolute inset-0 bg-gray-800-alpha" aria-hidden />
-        <div className="relative z-[1] max-w-[768px] px-4 text-center text-white">
+        <div data-anim="rise" className="relative z-[1] max-w-[768px] px-4 text-center text-white">
           <h1 className="text-[62px] font-bold leading-[1.2] max-lg:text-5xl max-md:text-[2rem]">
             Creating a Difference, <br />
             Experience Change
@@ -23,15 +26,15 @@ export default function JoinUsPage() {
         </div>
       </section>
 
-      <section className={sectionShell}>
+      <section data-motion="imageRight" className={sectionShell}>
         <div className="grid grid-cols-2 gap-[100px] max-lg:gap-10 max-md:grid-cols-1 max-md:gap-8">
-          <div>
+          <div data-anim="left">
             <p className="mb-2 text-lg font-medium text-gray-600">Join us</p>
             <h2 className="mb-2 text-5xl font-bold leading-tight max-lg:text-[40px] max-md:text-[32px]">
               Become a Member of SDA
             </h2>
             <p className="mb-10 max-w-[580px] text-lg leading-7 text-gray-700 max-lg:text-[17px] max-lg:leading-[26px] max-md:mb-10 max-md:text-base max-md:leading-6">
-              To join the Sustainable Development Advocate University of Lagos, applicants must demonstrate a commitment
+              To join the Sustainable Development Advocates University of Lagos, applicants must demonstrate a commitment
               to sustainable development principles. Basic requirements include being a student of the University of
               Lagos , and completion of the online application form. Applicants are expected to undergo an interim class
               which upon completion would submit essays on various topics outlining their passion for sustainable
@@ -46,7 +49,7 @@ export default function JoinUsPage() {
               Become a member
             </a>
           </div>
-          <div className="relative w-full overflow-hidden aspect-[6/5] max-lg:aspect-square max-md:aspect-[5/3]">
+          <div data-anim="zoom" style={{ '--d': '140ms' }} className="relative w-full overflow-hidden aspect-[6/5] max-lg:aspect-square max-md:aspect-[5/3]">
             <Image
               src="/images/home--sda-goals-1.png"
               alt="SDA Community"
@@ -60,9 +63,9 @@ export default function JoinUsPage() {
 
       <JoinUsEvents />
 
-      <section className={sectionShell}>
+      <section data-motion="imageLeft" className={sectionShell}>
         <div className="grid grid-cols-2 items-center gap-[60px] overflow-hidden rounded-3xl bg-primary-600 text-gray-50 max-lg:grid-cols-1 max-lg:gap-10 max-lg:p-[50px] max-md:grid-cols-1 max-md:gap-8 max-md:p-6">
-          <div className="px-[60px] py-5 max-lg:p-0 max-md:p-0">
+          <div data-anim="left" className="px-[60px] py-5 max-lg:p-0 max-md:p-0">
             <p className="mb-2 text-lg font-medium">Be in contact</p>
             <h2 className="mb-2 text-5xl font-bold leading-tight max-lg:text-[40px] max-md:text-[32px]">
               Creating a Cleaner Environment for All
@@ -78,7 +81,7 @@ export default function JoinUsPage() {
               Contact us
             </Link>
           </div>
-          <div className="relative h-[600px] max-h-[600px] w-full overflow-hidden max-lg:h-[400px] max-lg:max-h-[400px] max-lg:rounded-lg max-md:h-[300px] max-md:max-h-[300px] max-md:rounded-lg">
+          <div data-anim="right" style={{ '--d': '140ms' }} className="relative h-[600px] max-h-[600px] w-full overflow-hidden max-lg:h-[400px] max-lg:max-h-[400px] max-lg:rounded-lg max-md:h-[300px] max-md:max-h-[300px] max-md:rounded-lg">
             <Image
               src="/images/home--sda-goals-1.png"
               alt="SDA Community"

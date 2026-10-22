@@ -85,8 +85,8 @@ export function JoinUsEvents() {
 
   return (
     <>
-      <section className={sectionShell}>
-        <div className="mb-12 flex flex-col items-center gap-6 max-md:mb-8 max-md:gap-[30px]">
+      <section data-motion="events" className={sectionShell}>
+        <div data-anim="rise" className="mb-12 flex flex-col items-center gap-6 max-md:mb-8 max-md:gap-[30px]">
           <div className="relative">
             <h2 className="text-center text-5xl font-bold leading-tight max-lg:text-4xl max-md:text-[32px]">Our Events</h2>
             <Image
@@ -278,6 +278,8 @@ function EventCard({ event, index, onOpen }) {
 
   return (
     <div
+      data-anim="rise"
+      style={{ '--d': `${(index % 3) * 110}ms` }}
       className="max-w-[400px] overflow-hidden transition-colors hover:bg-primary-300-alpha max-md:mx-auto"
       data-event-index={index}
       role="button"

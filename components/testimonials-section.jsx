@@ -39,9 +39,10 @@ export function TestimonialsSection({ section }) {
       className="relative overflow-hidden bg-black text-white !px-0"
       aria-labelledby={heading ? headingId : undefined}
       data-section="testimonials"
+      data-motion="testimonials"
     >
       <div className="section relative z-[2] !px-0">
-        <header className="mx-auto mb-4 max-w-3xl text-center">
+        <header data-anim="drop" className="mx-auto mb-4 max-w-3xl text-center">
           <p className="mb-3 text-sm font-bold uppercase tracking-[0.2em] text-primary max-md:mb-2">
             {section?.eyebrow}
           </p>
@@ -63,6 +64,7 @@ export function TestimonialsSection({ section }) {
         </header>
 
         {items.length > 0 ? (
+          <div data-anim="rise" style={{ '--d': '160ms' }}>
           <Carousel
             visibleItemsCount={3}
             withIndicator
@@ -73,6 +75,7 @@ export function TestimonialsSection({ section }) {
               <TestimonialCard key={k} testimonial={testimonial} />
             ))}
           </Carousel>
+          </div>
         ) : null}
       </div>
     </section>

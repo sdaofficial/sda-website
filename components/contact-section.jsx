@@ -19,9 +19,13 @@ export function ContactSection({ section, socials = [] }) {
       id="contact"
       aria-labelledby={section.internalName || undefined}
       data-layout="form"
+      data-motion="form"
       data-theme={section.theme || 'gray'}
     >
-      <div className="contact-info flex h-full flex-col justify-between max-md:gap-10 max-md:border-b max-md:border-primary max-md:pb-5">
+      <div
+        data-anim="left"
+        className="contact-info flex h-full flex-col justify-between max-md:gap-10 max-md:border-b max-md:border-primary max-md:pb-5"
+      >
         <div className="contact-header">
           {section.eyebrow ? (
             <p className="contact-subheading mb-1 text-base font-medium text-gray-600">{section.eyebrow}</p>
@@ -66,7 +70,7 @@ export function ContactSection({ section, socials = [] }) {
         ) : null}
       </div>
 
-      <div className="contact-form-wrapper w-full">
+      <div data-anim="right" style={{ '--d': '140ms' }} className="contact-form-wrapper w-full">
         <form className="contact-form flex flex-col gap-5 max-md:gap-3" id="contactForm">
           <div className="form-group">
             <label htmlFor="fullName" className="form-label text-base font-medium max-md:text-sm">

@@ -105,8 +105,11 @@ export function TeamSection({ section }) {
   };
 
   return (
-    <section className="section team-section my-20 mb-[100px] mt-20 max-lg:my-[70px] max-lg:mb-20 max-md:my-10 max-md:mb-10">
-      <div className="team-header mb-12 text-center max-md:mb-7">
+    <section
+      data-motion="team"
+      className="section team-section my-20 mb-[100px] mt-20 max-lg:my-[70px] max-lg:mb-20 max-md:my-10 max-md:mb-10"
+    >
+      <div data-anim="rise" className="team-header mb-12 text-center max-md:mb-7">
         {section?.eyebrow ? (
           <p className="team-subheading mb-2 text-lg font-medium text-gray-600">{section.eyebrow}</p>
         ) : null}
@@ -133,7 +136,11 @@ export function TeamSection({ section }) {
       </div>
 
       {groups.length > 0 ? (
-        <div className="team-tabs mx-auto mb-12 flex w-fit overflow-hidden rounded-[32px] bg-gray-100 max-md:mb-7">
+        <div
+          data-anim="scale"
+          style={{ '--d': '140ms' }}
+          className="team-tabs mx-auto mb-12 flex w-fit overflow-hidden rounded-[32px] bg-gray-100 max-md:mb-7"
+        >
           {groups.map((group) => (
             <button
               key={group.key}
@@ -176,6 +183,7 @@ export function TeamSection({ section }) {
                 {group.members.map((member) => (
                   <div
                     key={`${group.key}-${member.name}-${member.title}`}
+                    data-anim="rise"
                     className="team-member shrink-0 basis-[calc(25%-18px)] max-md:basis-[calc(50%-8px)]"
                   >
                     {member.image?.url ? (

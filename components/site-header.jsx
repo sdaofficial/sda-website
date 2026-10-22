@@ -14,7 +14,7 @@ const HEADER_PAGES = {
   contact: { label: 'Contact Us', path: '#contact' },
 };
 
-const HEADER_NAV_ORDER = ['home', 'about', 'joinUs', 'blog', 'contact'];
+const HEADER_NAV_ORDER = ['home', 'about', 'contact']; // 'home', 'about', 'joinUs', 'blog', 'contact'
 
 function getActivePageId(pathname) {
   const current = pathname || '/';
@@ -117,7 +117,7 @@ export function SiteHeader() {
                     key={pageId}
                     href={contactHref}
                     onClick={goToContact}
-                    className="contact-btn rounded-md border border-primary-400 px-6 py-2.5 font-medium text-primary-400 no-underline transition-colors hover:bg-primary-400 hover:text-white max-lg:px-5 max-lg:py-2 max-lg:text-[15px]"
+                    className="contact-btn rounded-full border border-solid border-primary-400 px-6 py-2.5 font-medium text-primary-400 no-underline transition-colors hover:bg-primary-400 hover:text-white max-lg:px-5 max-lg:py-2 max-lg:text-[15px]"
                   >
                     {label}
                   </Link>

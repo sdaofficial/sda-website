@@ -157,41 +157,54 @@ function HeroSection({ section }) {
       className="relative isolate flex min-h-[480px] items-center overflow-hidden bg-black text-white lg:min-h-[560px]"
       aria-labelledby={section?.internalName || undefined}
       data-layout="hero"
+      data-motion="hero"
       data-theme={section?.theme || 'dark'}
     >
       {image?.url ? (
-        <Image
-          src={image.url}
-          alt={imageAlt(image)}
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center"
-          unoptimized={isVectorImage(image)}
-        />
+        <div data-anim="zoom" className="absolute inset-0">
+          <Image
+            src={image.url}
+            alt={imageAlt(image)}
+            fill
+            priority
+            sizes="100vw"
+            className="object-cover object-center"
+            unoptimized={isVectorImage(image)}
+          />
+        </div>
       ) : null}
       <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/80 to-black/65" aria-hidden />
-      <Image
-        src="/images/icons/zap-1.svg"
-        alt=""
-        width={131}
-        height={63}
-        unoptimized
-        className="pointer-events-none absolute -right-8 top-10 z-[1] h-auto w-20 rotate-90 max-md:right-4 max-md:top-4 max-md:w-14"
-      />
-      <Image
-        src="/images/icons/zap-2.svg"
-        alt=""
-        width={108}
-        height={10}
-        unoptimized
-        className="pointer-events-none absolute bottom-8 -left-5 z-[1] h-auto w-24 -rotate-[20deg] max-md:bottom-5 max-md:left-5 max-md:w-16"
-      />
+      <span data-anim="right" style={{ '--d': '180ms' }} className="pointer-events-none absolute -right-8 top-10 z-[1] max-md:right-4 max-md:top-4">
+        <Image
+          src="/images/icons/zap-1.svg"
+          alt=""
+          width={131}
+          height={63}
+          unoptimized
+          className="h-auto w-20 rotate-90 max-md:w-14"
+        />
+      </span>
+      <span data-anim="left" style={{ '--d': '260ms' }} className="pointer-events-none absolute bottom-8 -left-5 z-[1] max-md:bottom-5 max-md:left-5">
+        <Image
+          src="/images/icons/zap-2.svg"
+          alt=""
+          width={108}
+          height={10}
+          unoptimized
+          className="h-auto w-24 -rotate-[20deg] max-md:w-16"
+        />
+      </span>
       <div className="relative z-[1] w-full px-20 py-20 max-lg:px-[50px] max-md:px-6 max-md:py-16">
-        {section?.eyebrow ? <p className="mb-3 text-sm font-medium text-white">{section.eyebrow}</p> : null}
+        {section?.eyebrow ? (
+          <p data-anim="drop" className="mb-3 text-sm font-medium text-white">
+            {section.eyebrow}
+          </p>
+        ) : null}
         {section?.heading ? (
           <h1
             id={section?.internalName}
+            data-anim="rise"
+            style={{ '--d': '120ms' }}
             className="max-w-[11em] text-[56px] font-bold leading-[1.05] tracking-tight text-white max-lg:text-5xl max-md:max-w-none max-md:text-[34px]"
           >
             {renderHeading({
@@ -202,7 +215,7 @@ function HeroSection({ section }) {
           </h1>
         ) : null}
         {cta?.label ? (
-          <div className="mt-8">
+          <div data-anim="rise" style={{ '--d': '240ms' }} className="mt-8">
             <CtaLink
               label={cta.label}
               url={cta.url}
@@ -239,8 +252,29 @@ export function PageSectionBlock({ section }) {
   const hasVideo = Boolean(videoUrl);
   const videoCover = images[0];
 
+  const contentMotion =
+    layout === 'imageRight'
+      ? ['left', 140]
+      : layout === 'imageLeft'
+        ? ['right', 140]
+        : layout === 'imageTop'
+          ? ['rise', 160]
+          : ['rise', 0];
+  const mediaMotion =
+    layout === 'imageRight'
+      ? ['right', 0]
+      : layout === 'imageLeft'
+        ? ['left', 0]
+        : layout === 'imageTop' || layout === 'noImage'
+          ? ['zoom', 0]
+          : layout === 'imageBottomShadow'
+            ? ['rise', 200]
+            : ['rise', 0];
+
   const contentBlock = (
     <div
+      data-anim={contentMotion[0]}
+      style={{ '--d': `${contentMotion[1]}ms` }}
       className={cn(
         layout === 'noImage' && 'mx-auto max-w-3xl',
         layout === 'imageBottomShadow' && 'mx-auto w-full max-w-3xl text-center',
@@ -308,14 +342,20 @@ export function PageSectionBlock({ section }) {
         <div className={cn('mb-10', layout === 'imageBottomShadow' && 'relative inline-block')}>
           <CtaLink label={primaryCta?.label} url={primaryCta?.url} openInNewTab={primaryCta?.openInNewTab} />
           {layout === 'imageBottomShadow' ? (
-            <Image
-              src="/images/icons/curly-arrow.svg"
-              alt=""
-              width={111}
-              height={55}
-              unoptimized
-              className="pointer-events-none absolute left-[calc(100%+0.75rem)] top-1/2 h-auto w-[92px] -translate-y-[85%] max-md:w-16"
-            />
+            <span
+              data-anim="pop"
+              style={{ '--d': '320ms' }}
+              className="pointer-events-none absolute left-[calc(100%+0.75rem)] top-1/2"
+            >
+              <Image
+                src="/images/icons/curly-arrow.svg"
+                alt=""
+                width={111}
+                height={55}
+                unoptimized
+                className="h-auto w-[92px] -translate-y-[85%] max-md:w-16"
+              />
+            </span>
           ) : null}
         </div>
       ) : null}
@@ -326,6 +366,8 @@ export function PageSectionBlock({ section }) {
 
   const mediaBlock = (
     <div
+      data-anim={mediaMotion[0]}
+      style={{ '--d': `${mediaMotion[1]}ms` }}
       className={cn(
         'flex justify-center',
         layout === 'imageRight' && 'lg:justify-end',
@@ -419,6 +461,7 @@ export function PageSectionBlock({ section }) {
       )}
       aria-labelledby={section?.internalName}
       data-layout={section?.layout}
+      data-motion={layout}
       data-theme={theme}
     >
       <div className={cn(subBlocks.length > 0 && 'relative z-[1]')}>{sectionInner}</div>

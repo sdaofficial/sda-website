@@ -62,13 +62,15 @@ function EventDescription({ text }) {
   );
 }
 
-function UpcomingEventCard({ event, reversed }) {
+function UpcomingEventCard({ event, reversed, index }) {
   const src = event?.image?.url ?? null;
   const title = event?.title?.trim() ?? 'Event';
   const dateLine = formatEventDateTime(event?.dateTime);
 
   return (
     <article
+      data-anim={reversed ? 'right' : 'left'}
+      style={{ '--d': `${index * 120}ms` }}
       className={cn(
         'flex flex-col gap-6 rounded-[2rem] bg-gray-50 p-6 md:flex-row md:items-stretch md:gap-10 md:p-10',
         reversed ? 'flex-col-reverse md:flex-row-reverse' : 'flex-col md:flex-row'
@@ -110,10 +112,12 @@ export function UpcomingEventsSection({ section }) {
       id="events"
       className="section upcoming-events-section border-b border-gray-200 bg-white py-16 max-lg:py-14 max-md:py-12"
       aria-labelledby={section?.internalName ?? 'upcoming-events-heading'}
+      data-motion="events"
     >
       <div className="mx-auto w-full max-w-[920px]">
         <h2
           id={section?.internalName ?? 'upcoming-events-heading'}
+          data-anim="rise"
           className="text-4xl font-bold tracking-tight text-gray-900 max-md:text-3xl mb-14 text-center max-md:mb-10"
         >
           {section?.heading?.trim() ?? 'Upcoming Events'}
@@ -122,7 +126,7 @@ export function UpcomingEventsSection({ section }) {
         <ul className="m-0 flex list-none flex-col gap-12 p-0 max-md:gap-10">
           {events.map((event, index) => (
             <li key={`${event?.title ?? 'event'}-${index}`}>
-              <UpcomingEventCard event={event} reversed={index % 2 === 1} />
+              <UpcomingEventCard event={event} reversed={index % 2 === 1} index={index} />
             </li>
           ))}
         </ul>

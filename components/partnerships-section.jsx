@@ -29,9 +29,9 @@ const textOnlyClass = {
   gray: 'text-gray-900',
 };
 
-function PartnerLogoCard({ item, theme }) {
+function PartnerLogoCard({ item, theme, delay = 0 }) {
   return (
-    <div className="flex min-w-[150px] flex-col items-center gap-2.5">
+    <div data-anim="pop" style={{ '--d': `${delay}ms` }} className="flex min-w-[150px] flex-col items-center gap-2.5">
       <div
         className={cn(
           'flex flex-col w-full h-full gap-2 items-center justify-center rounded-xl px-3 py-4 max-md:h-[88px]',
@@ -87,9 +87,10 @@ export function PartnershipsSection({ section }) {
       )}
       aria-labelledby={headingId}
       data-section="partnerships"
+      data-motion="partnerships"
     >
       <div className="mx-auto w-full max-w-[1100px]">
-        <header className="mb-12 text-center max-md:mb-10">
+        <header data-anim="rise" className="mb-12 text-center max-md:mb-10">
           <h2
             id={headingId}
             className={cn(
@@ -108,6 +109,7 @@ export function PartnershipsSection({ section }) {
                 key={i}
                 item={item}
                 theme={theme}
+                delay={80 + i * 70}
               />
             ))}
           </div>
@@ -121,7 +123,12 @@ export function PartnershipsSection({ section }) {
             )}
           >
             {textOnly.map((item, i) => (
-              <li key={`${item.name}-${i}`} className={textOnlyClass[theme] ?? textOnlyClass.light}>
+              <li
+                key={`${item.name}-${i}`}
+                data-anim="rise"
+                style={{ '--d': `${i * 80}ms` }}
+                className={textOnlyClass[theme] ?? textOnlyClass.light}
+              >
                 {item.name.trim()}
               </li>
             ))}
