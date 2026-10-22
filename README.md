@@ -1,4 +1,5 @@
 # SDA - Sustainable Development Advocates
+* Latest Deployment for Next JS Migration: 22 Oct 2026 | 3:57 PM
 
 This website showcases the mission, events, team members, and joining information of the Sustainable Development Advocates organization at the University of Lagos.
 
