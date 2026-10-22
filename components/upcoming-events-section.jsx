@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { imageAlt, isVectorImage } from '@/lib/media';
 
 function cn(...parts) {
   return parts.filter(Boolean).join(' ');
@@ -37,14 +38,8 @@ function formatEventDateTime(iso) {
   return `${day} ${month}, ${year} | ${time}`;
 }
 
-function eventImageUrl(event) {
-  const wrap = event?.imageAsset;
-  return wrap?.imageAsset?.url ?? wrap?.url ?? null;
-}
-
 function eventImageAlt(event) {
-  const wrap = event?.imageAsset;
-  return wrap?.altText?.trim() ?? wrap?.caption?.trim() ?? event?.title?.trim() ?? 'Event';
+  return imageAlt(event?.image, event?.title?.trim() || 'Event');
 }
 
 function EventDescription({ text }) {
@@ -68,7 +63,7 @@ function EventDescription({ text }) {
 }
 
 function UpcomingEventCard({ event, reversed }) {
-  const src = eventImageUrl(event);
+  const src = event?.image?.url ?? null;
   const title = event?.title?.trim() ?? 'Event';
   const dateLine = formatEventDateTime(event?.dateTime);
 
@@ -88,7 +83,14 @@ function UpcomingEventCard({ event, reversed }) {
       </div>
       <div className="relative aspect-[3/2] w-full shrink-0 overflow-hidden rounded-2xl bg-gray-200 md:aspect-auto md:min-h-[220px] md:w-1/2">
         {src ? (
-          <Image src={src} alt={eventImageAlt(event)} fill className="object-cover object-center" sizes="(max-width: 768px) 100vw, 480px" />
+          <Image
+            src={src}
+            alt={eventImageAlt(event)}
+            fill
+            className="object-cover object-center"
+            sizes="(max-width: 768px) 100vw, 480px"
+            unoptimized={isVectorImage(event?.image)}
+          />
         ) : (
           <div className="flex h-full min-h-[180px] items-center justify-center text-sm font-medium text-gray-500 md:min-h-[220px]">
             Image coming soon
@@ -100,11 +102,12 @@ function UpcomingEventCard({ event, reversed }) {
 }
 
 export function UpcomingEventsSection({ section }) {
-  const events = (section?.eventsCollection?.items ?? []).filter((e) => e?.title?.trim() ?? e?.description?.trim());
+  const events = (section?.events ?? []).filter((e) => e?.title?.trim() || e?.description?.trim());
   if (events.length === 0) return null;
 
   return (
     <section
+      id="events"
       className="section upcoming-events-section border-b border-gray-200 bg-white py-16 max-lg:py-14 max-md:py-12"
       aria-labelledby={section?.internalName ?? 'upcoming-events-heading'}
     >

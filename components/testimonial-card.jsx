@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { imageAlt, isVectorImage } from '@/lib/media';
 
 export default function TestimonialCard({ testimonial }) {
 
@@ -12,14 +13,17 @@ export default function TestimonialCard({ testimonial }) {
           <div
             className="relative aspect-[6/5] h-[200px] border-2 border-primary-400 overflow-hidden rounded-3xl"
           >
-            <Image
-              src={testimonial?.imageAsset?.imageAsset?.url}
-              alt={testimonial?.imageAsset?.caption}
-              fill
-              className="object-cover object-center"
-              sizes="(max-width: 768px) 100vw, 44vw"
-              priority={false}
-            />
+            {testimonial?.image?.url ? (
+              <Image
+                src={testimonial.image.url}
+                alt={imageAlt(testimonial.image, testimonial?.author)}
+                fill
+                className="object-cover object-center"
+                sizes="(max-width: 768px) 100vw, 44vw"
+                priority={false}
+                unoptimized={isVectorImage(testimonial.image)}
+              />
+            ) : null}
           </div>
 
           <div className="flex flex-1 flex-col justify-center gap-1 -mt-8">

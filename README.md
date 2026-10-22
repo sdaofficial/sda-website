@@ -9,6 +9,7 @@ This website showcases the mission, events, team members, and joining informatio
 - **Tailwind CSS** (utilities; legacy layout CSS kept, Preflight off to avoid double resets)
 - **Theme** — colors and font stacks defined only in `tailwind.config.ts` (no `:root` CSS variables)
 - **JSON** data in `data/` for events and team members
+- **Supabase** for homepage CMS content and media
 
 ## Getting Started
 
@@ -37,10 +38,30 @@ npm run build
 npm start
 ```
 
+## Homepage content
+
+The homepage CMS blocks are loaded from Supabase by the slug `home`. Team members, Join Us events, and the hardcoded homepage sections stay in this repo.
+
+Set these in `.env.local`:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+```
+
+On a new Supabase project, run these in the SQL editor in order:
+
+- `supabase/sql/001_schema.sql`
+- `supabase/sql/002_rls.sql`
+- `supabase/sql/003_storage.sql`
+- `supabase/sql/004_get_page.sql`
+
 ## Project layout
 
 - `app/` — App Router pages (`/`, `/join-us`, etc.) and global styles entry
-- `components/` — Header, footer, team carousel, join-us events and modal
+- `components/` — Header, footer, homepage sections, team carousel, join-us events
+- `lib/` — Supabase server client and homepage loader
+- `supabase/sql/` — schema, access policies, storage, and the page loader
 - `data/` — `team-members.json` and `events.json`
 - `public/` — Static assets (images and fonts)
 - `tailwind.config.ts` — **Colors and fonts** (`theme.extend`)

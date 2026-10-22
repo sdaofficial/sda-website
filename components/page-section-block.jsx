@@ -1,5 +1,7 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
+import { imageAlt, isVectorImage } from '@/lib/media';
 import { ImageSlot } from './image-slot';
 import { SectionStatistics } from './section-statistics';
 import { SectionVideoEmbed } from './section-video-embed';
@@ -27,6 +29,38 @@ const themeShell = {
   dark: 'bg-black text-white',
   gray: 'bg-gray-50 text-gray-900',
 };
+
+const bottomFade = {
+  light: 'from-white',
+  dark: 'from-black',
+  gray: 'from-gray-50',
+};
+
+function LandscapeShadowImage({ img, fadeClass }) {
+  if (!img?.url) return null;
+
+  return (
+    <div className="relative w-full overflow-hidden rounded-t-[2rem] max-md:rounded-t-2xl">
+      <div className="relative aspect-[16/9] w-full">
+        <Image
+          src={img.url}
+          alt={imageAlt(img)}
+          fill
+          className="object-cover object-center"
+          sizes="(max-width: 1200px) 100vw, 1200px"
+          priority
+          unoptimized={isVectorImage(img)}
+        />
+      </div>
+      <div
+        className={cn(
+          'pointer-events-none absolute inset-x-0 bottom-0 h-2/5 bg-gradient-to-t to-transparent',
+          fadeClass
+        )}
+      />
+    </div>
+  );
+}
 
 const themeContent = {
   light: {
@@ -117,14 +151,15 @@ export function PageSectionBlock({ section }) {
     return <SectionSkeleton theme="light" />;
   }
 
-  const layout = section?.layout;
+  const layout =
+    section?.layout === 'videoEmbedLeft' ? 'imageLeft' : section?.layout === 'form' ? 'noImage' : section?.layout;
   const theme = section?.theme;
-  const themeStyle = themeContent[theme];
+  const themeStyle = themeContent[theme] ?? themeContent.light;
   const highlightWords = section?.headingHighlights;
-  const stats = section?.statisticsCollection?.items ?? [];
-  const subBlocks = (section?.subBlocksCollection?.items ?? []).filter((b) => b?.title?.trim() || b?.body?.trim());
-  const images = (section?.imagesCollection?.items ?? []).filter((img) => Boolean(img?.imageAsset?.url));
-  const primaryCta = section?.ctAsCollection?.items?.[0];
+  const stats = section?.statistics ?? [];
+  const subBlocks = (section?.subBlocks ?? []).filter((b) => b?.title?.trim() || b?.body?.trim());
+  const images = (section?.images ?? []).filter((img) => Boolean(img?.url));
+  const primaryCta = section?.ctas?.[0];
   const videoUrlRaw = section?.videoUrl;
   const videoUrl = typeof videoUrlRaw === 'string' ? videoUrlRaw.trim() : '';
   const hasVideo = Boolean(videoUrl);
@@ -134,7 +169,7 @@ export function PageSectionBlock({ section }) {
     <div
       className={cn(
         layout === 'noImage' && 'mx-auto max-w-3xl',
-        layout === 'imageBottomShadow' && 'max-w-3xl',
+        layout === 'imageBottomShadow' && 'mx-auto w-full max-w-3xl text-center',
         (layout === 'imageLeft' || layout === 'imageRight') &&
           'lg:max-w-none lg:justify-self-start',
         layout === 'imageTop' && 'max-w-3xl lg:mx-auto'
@@ -162,7 +197,7 @@ export function PageSectionBlock({ section }) {
       </h2>
 
       {section?.body ? (
-        <p className={cn('mb-8 max-w-xl text-lg leading-7 max-md:text-base max-md:leading-6 font-light', themeStyle.body)}>
+        <p className={cn('mb-8 max-w-xl text-lg leading-7 max-md:text-base max-md:leading-6 font-light', layout === 'imageBottomShadow' && 'mx-auto', themeStyle.body)}>
           {section?.body}
         </p>
       ) : null}
@@ -171,6 +206,7 @@ export function PageSectionBlock({ section }) {
         <div
           className={cn(
             'mb-10 flex max-w-2xl flex-col gap-10 max-md:gap-8',
+            layout === 'imageBottomShadow' && 'mx-auto',
             !section?.body && 'mt-6'
           )}
         >
@@ -195,8 +231,18 @@ export function PageSectionBlock({ section }) {
       ) : null}
 
       {primaryCta?.label ? (
-        <div className="mb-10">
+        <div className={cn('mb-10', layout === 'imageBottomShadow' && 'relative inline-block')}>
           <CtaLink label={primaryCta?.label} url={primaryCta?.url} openInNewTab={primaryCta?.openInNewTab} />
+          {layout === 'imageBottomShadow' ? (
+            <Image
+              src="/images/icons/curly-arrow.svg"
+              alt=""
+              width={111}
+              height={55}
+              unoptimized
+              className="pointer-events-none absolute left-[calc(100%+0.75rem)] top-1/2 h-auto w-[92px] -translate-y-[85%] max-md:w-16"
+            />
+          ) : null}
         </div>
       ) : null}
 
@@ -219,10 +265,12 @@ export function PageSectionBlock({ section }) {
           videoUrl={videoUrl}
           videoCaption={section?.videoCaption}
           videoSubcaption={section?.videoSubcaption}
-          coverImageUrl={videoCover?.imageAsset?.url}
-          coverAlt={videoCover?.altText ?? videoCover?.caption ?? ''}
+          coverImageUrl={videoCover?.url}
+          coverAlt={videoCover?.alt ?? videoCover?.caption ?? ''}
           priority
         />
+      ) : layout === 'imageBottomShadow' ? (
+        <LandscapeShadowImage img={images[0]} fadeClass={bottomFade[theme] ?? bottomFade.dark} />
       ) : (
         <ImageSlot images={images} priority />
       )}
@@ -296,7 +344,7 @@ export function PageSectionBlock({ section }) {
         subBlocks.length > 0 && 'relative'
       )}
       aria-labelledby={section?.internalName}
-      data-layout={layout}
+      data-layout={section?.layout}
       data-theme={theme}
     >
       <div className={cn(subBlocks.length > 0 && 'relative z-[1]')}>{sectionInner}</div>

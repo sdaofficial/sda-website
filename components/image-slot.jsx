@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
+import { imageAlt, isVectorImage } from '@/lib/media';
 
 const CARD_FAN = [
   { rotate: -5, z: 30 },
@@ -15,12 +16,13 @@ function SingleImage({ img, priority }) {
   return (
     <div className="relative mx-auto w-full max-w-[300px] overflow-hidden rounded-2xl shadow-lg ring-1 max-md:max-w-[88%] aspect-[4/5]">
       <Image
-        src={img?.imageAsset?.url ?? img?.url}
-        alt={img?.caption}
+        src={img.url}
+        alt={imageAlt(img)}
         fill
         className="object-cover object-center"
         sizes="(max-width: 1024px) 88vw, 300px"
         priority={priority}
+        unoptimized={isVectorImage(img)}
       />
     </div>
   );
@@ -64,12 +66,13 @@ function FanImages({ images }) {
             }}
           >
             <Image
-              src={img?.imageAsset?.url}
-              alt={img?.altText}
+              src={img.url}
+              alt={imageAlt(img)}
               fill
               className="object-cover object-center"
               sizes="(max-width: 1024px) 72vw, 300px"
               priority={slotIndex === 0}
+              unoptimized={isVectorImage(img)}
             />
           </div>
         );
@@ -88,12 +91,13 @@ function GalleryGrid({ images }) {
           className="relative aspect-square w-full overflow-hidden rounded-2xl bg-white shadow-md ring-1"
         >
           <Image
-            src={img?.url}
-            alt={img?.description}
+            src={img.url}
+            alt={imageAlt(img)}
             fill
             className="object-cover object-center"
             sizes="(max-width: 640px) 45vw, 180px"
             priority={index < 3}
+            unoptimized={isVectorImage(img)}
           />
         </div>
       ))}
@@ -103,9 +107,7 @@ function GalleryGrid({ images }) {
 
 // layout is also a prop, and it can be noImage, singleImage, fanImages, or galleryGrid
 export function ImageSlot({ images, priority }) {
-  const imgArray = Array.isArray(images)
-    ? images?.filter((img) => Boolean(img?.imageAsset?.url))
-    : [];
+  const imgArray = Array.isArray(images) ? images.filter((img) => Boolean(img?.url)) : [];
 
   switch (imgArray?.length) {
     case 0:

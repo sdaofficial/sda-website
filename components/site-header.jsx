@@ -8,11 +8,13 @@ import { useCallback, useEffect, useState } from 'react';
 /** Page ids, labels, and routes — single source for header nav + active state */
 const HEADER_PAGES = {
   home: { label: 'Home', path: '/' },
+  about: { label: 'About us', path: '/about' },
   joinUs: { label: 'Get involved', path: '/join-us' },
+  blog: { label: 'Blog', path: '/blog' },
   contact: { label: 'Contact Us', path: '/#contact' },
 };
 
-const HEADER_NAV_ORDER = ['home', 'joinUs', 'contact'];
+const HEADER_NAV_ORDER = ['home', 'about', 'joinUs', 'blog', 'contact'];
 
 function getActivePageId(pathname) {
   const current = pathname || '/';

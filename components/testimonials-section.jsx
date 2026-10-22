@@ -24,7 +24,7 @@ function renderHeading({ heading, highlightWords, highlightClassName }) {
 }
 
 export function TestimonialsSection({ section }) {
-  const items = (section?.testimonialsCollection?.items ?? []).filter(Boolean);
+  const items = (section?.testimonials ?? []).filter(Boolean);
 
   const heading = section?.heading?.trim();
   const highlights = section?.headingHighlights;

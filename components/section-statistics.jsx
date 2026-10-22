@@ -3,20 +3,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCallback, useEffect, useId, useState } from 'react';
+import { imageAlt, isVectorImage } from '@/lib/media';
 
 function cn(...parts) {
   return parts.filter(Boolean).join(' ');
 }
 
-function grantImageUrl(grant) {
-  const wrap = grant?.imageAsset;
-  if (!wrap) return null;
-  return wrap.imageAsset?.url ?? wrap.url ?? null;
-}
-
 function grantImageAlt(grant) {
-  const wrap = grant?.imageAsset;
-  return wrap?.altText || wrap?.caption || grant?.name || '';
+  return imageAlt(grant?.image, grant?.name || '');
 }
 
 function statModalTitle(stat) {
@@ -65,7 +59,7 @@ export function SectionStatistics({ stats }) {
 
   if (!stats?.length) return null;
 
-  const grants = active?.grantsCollection?.items?.filter(Boolean) ?? [];
+  const grants = active?.grants?.filter(Boolean) ?? [];
 
   return (
     <>
@@ -131,14 +125,21 @@ export function SectionStatistics({ stats }) {
                   {grants.length > 0 ? (
                     <ul className="mt-4 flex list-none flex-col gap-12 p-0 max-md:gap-10">
                       {grants.map((grant, gi) => {
-                        const src = grantImageUrl(grant);
-                        const linkUrl = grant?.url?.url?.trim();
-                        const linkLabel = grant?.url?.label?.trim();
+                        const src = grant?.image?.url ?? null;
+                        const linkUrl = grant?.link?.url?.trim();
+                        const linkLabel = grant?.link?.label?.trim();
                         return (
                           <li key={gi} className="flex gap-6 max-md:gap-4">
                             <div className="relative h-[88px] w-[88px] shrink-0 overflow-hidden rounded-2xl bg-white ring-1 ring-white/10 max-md:h-[72px] max-md:w-[72px]">
                               {src ? (
-                                <Image src={src} alt={grantImageAlt(grant)} fill className="object-cover object-center" sizes="88px" />
+                                <Image
+                                  src={src}
+                                  alt={grantImageAlt(grant)}
+                                  fill
+                                  className="object-cover object-center"
+                                  sizes="88px"
+                                  unoptimized={isVectorImage(grant?.image)}
+                                />
                               ) : (
                                 <span className="flex h-full w-full items-center justify-center text-xs font-medium text-gray-500">—</span>
                               )}

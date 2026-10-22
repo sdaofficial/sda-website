@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { imageAlt, isVectorImage } from '@/lib/media';
 
 function cn(...parts) {
   return parts.filter(Boolean).join(' ');
@@ -39,12 +40,13 @@ function PartnerLogoCard({ item, theme }) {
       >
         <div className="flex w-full flex-1 items-center justify-center">
           <Image
-            src={item?.imageAsset?.imageAsset?.url}
-            alt={item?.imageAsset?.altText}
+            src={item.image.url}
+            alt={imageAlt(item.image, item?.name)}
             width={140}
             height={72}
             className="max-h-[52px] w-auto max-w-full object-contain max-md:max-h-[44px]"
             sizes="(max-width: 768px) 140px, 160px"
+            unoptimized={isVectorImage(item.image)}
           />
         </div>
 
@@ -62,9 +64,9 @@ function PartnerLogoCard({ item, theme }) {
 }
 
 export function PartnershipsSection({ section }) {
-  const raw = (section?.partnershipsCollection?.items ?? []).filter(Boolean);
-  const withImage = raw.filter((item) => Boolean(item?.imageAsset?.imageAsset?.url));
-  const textOnly = raw.filter((item) => !item?.imageAsset?.imageAsset?.url && item?.name?.trim());
+  const raw = (section?.partnerships ?? []).filter(Boolean);
+  const withImage = raw.filter((item) => Boolean(item?.image?.url));
+  const textOnly = raw.filter((item) => !item?.image?.url && item?.name?.trim());
 
   const theme = section?.theme === 'dark' || section?.theme === 'gray' ? section.theme : 'light';
   const heading = section?.heading?.trim() ?? 'Partnerships';

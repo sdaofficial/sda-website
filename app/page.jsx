@@ -1,39 +1,13 @@
 import Image from 'next/image';
-import { PageSectionBlock } from '@/components/page-section-block';
+import { CmsSections } from '@/components/cms-sections';
 import { TeamSection } from '@/components/team-section';
-import { UpcomingEventsSection } from '@/components/upcoming-events-section';
-import { getPageById } from '@/lib/contentful';
-import { TestimonialsSection } from '@/components/testimonials-section';
-import { PartnershipsSection } from '@/components/partnerships-section';
 
-const HOME_PAGE_ENTRY_ID = '617p1qDzJLE2ZQt4KkQeYd';
-
-export default async function HomePage() {
-  const pageById = await getPageById(HOME_PAGE_ENTRY_ID);
-  const sectionItems = pageById?.sectionsCollection?.items?.filter(Boolean) ?? [];
-
+export default function HomePage() {
   return (
     <>
-      {sectionItems.map((section) => {
-        const isEvents =
-          section?.__typename === 'EventsSectionBlock' || section?.eventsCollection != null;
-        const isTestimonials =
-          section?.__typename === 'TestimonialBlock' || section?.testimonialsCollection != null;
-        const isPartnerships =
-          section?.__typename === 'PartnershipsBlock' || section?.partnershipsCollection != null;
+      <CmsSections slug="home" />
 
-        return isEvents ? (
-          <UpcomingEventsSection key={section.internalName ?? 'events'} section={section} />
-        ) : isTestimonials ? (
-          <TestimonialsSection key={section.internalName ?? 'testimonials'} section={section} />
-        ) : isPartnerships ? (
-          <PartnershipsSection key={section.internalName ?? 'partnerships'} section={section} />
-        ) : (
-          <PageSectionBlock key={section.internalName} section={section} />
-        );
-      })}
-
-      <section className="section history-section mt-[100px] max-lg:mt-20 max-md:mt-[60px]">
+      <section id="about" className="section history-section mt-[100px] max-lg:mt-20 max-md:mt-[60px]">
         <div className="history-ctn grid grid-cols-2 items-start gap-8 max-lg:gap-7 max-md:grid-cols-1 max-md:gap-5">
           <div className="history-header">
             <p className="history-subheading mb-2 text-lg font-medium text-gray-600">Our history</p>
@@ -173,158 +147,6 @@ export default async function HomePage() {
       </section>
 
       <TeamSection />
-
-      <section className="community-section bg-gray-900 px-10 pb-10 pt-[100px] text-center text-gray-100 max-lg:px-[50px] max-lg:pb-10 max-lg:pt-20 max-md:px-6 max-md:pb-5 max-md:pt-[60px]">
-        <div className="community-content mx-auto max-w-[810px]">
-          <p className="community-subheading mb-2 text-base font-medium">Our community</p>
-          <h2 className="community-heading mb-3 text-5xl font-bold leading-[1.15] text-gray-50 max-lg:text-4xl max-md:text-[32px]">
-            Ready to Become a Part of <br />
-            our Vibrant Community?
-          </h2>
-          <p className="community-description mx-auto text-lg leading-7 text-gray-100 max-lg:text-[17px] max-lg:leading-[26px] max-md:text-sm max-md:leading-5">
-            Join our passionate cleaning community today and together let&apos;s make the world cleaner and brighter, one
-            step at a time. Your enthusiasm and insights are welcome here. Let&apos;s make the world shine together.
-          </p>
-
-          <div className="community-cta relative my-8 max-md:my-8 max-md:flex max-md:flex-col max-md:gap-3">
-            <Image
-              src="/images/icons/curly-arrow.svg"
-              alt=""
-              width={100}
-              height={80}
-              unoptimized
-              className="community-arrow pointer-events-none absolute -top-8 left-[65%] h-auto w-[100px] max-md:-top-4 max-md:left-[70%] max-md:w-[60px]"
-            />
-            <a
-              className="community-btn inline-block rounded-md bg-primary px-10 py-4 text-lg font-bold text-white no-underline transition-colors visited:text-white hover:bg-primary-400 max-lg:px-9 max-lg:py-3.5 max-lg:text-base max-md:px-8 max-md:py-3.5 max-md:text-sm"
-              href="#"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Join Now
-            </a>
-          </div>
-        </div>
-
-        <div className="community-image-wrapper relative mx-auto max-w-[1200px] overflow-hidden after:pointer-events-none after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[150px] after:bg-gradient-to-t after:from-gray-900 after:to-transparent max-md:after:h-[120px]">
-          <Image
-            src="/images/home--community.png"
-            alt="SDA Community"
-            width={1200}
-            height={675}
-            sizes="(max-width: 1200px) 100vw, 1200px"
-            className="community-image block h-auto w-full object-cover object-center"
-          />
-        </div>
-      </section>
-
-      <section className="contact-section grid grid-cols-2 items-start gap-[120px] px-20 py-[100px] text-gray-900 max-lg:gap-20 max-lg:px-[50px] max-lg:py-20 max-md:grid-cols-1 max-md:gap-5 max-md:px-6 max-md:pb-6 max-md:pt-10">
-        <div className="contact-info flex h-full flex-col justify-between max-md:gap-10 max-md:border-b max-md:border-primary max-md:pb-5">
-          <div className="contact-header mb-auto">
-            <p className="contact-subheading mb-1 text-base font-medium text-gray-600">Be in contact</p>
-            <h2 className="contact-heading mb-3 text-5xl font-bold leading-tight max-lg:text-4xl max-md:text-[32px]">Reach Out</h2>
-            <p className="contact-description max-w-[530px] text-lg font-medium leading-7 text-gray-600 max-lg:text-[17px] max-lg:leading-[26px] max-md:max-w-none max-md:text-sm max-md:leading-6">
-              Have an question, collaborate or speak further, we are just one click away. Let&apos;s create an healthy
-              environment together!!!
-            </p>
-          </div>
-
-          <div className="contact-social my-auto mb-20 max-md:mb-0">
-            <h3 className="contact-social-heading mb-3 text-base font-bold max-md:text-lg">Follow us on</h3>
-            <div className="contact-social-links flex items-center gap-8 max-md:gap-6">
-              <a
-                href="https://instagram.com/sdaunilag"
-                className="social-link h-8 w-8 transition-[filter] hover:opacity-80 max-md:h-6 max-md:w-6"
-                aria-label="Instagram"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image src="/images/icons/instagram.svg" alt="" width={32} height={32} unoptimized className="h-full w-full object-cover object-center" />
-              </a>
-              <a
-                href="https://twitter.com/sdaunilag"
-                className="social-link h-8 w-8 transition-[filter] hover:opacity-80 max-md:h-6 max-md:w-6"
-                aria-label="Twitter"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image src="/images/icons/twitter.svg" alt="" width={32} height={32} unoptimized className="h-full w-full object-cover object-center" />
-              </a>
-              <a
-                href="https://www.linkedin.com/company/sdaunilag"
-                className="social-link h-8 w-8 transition-[filter] hover:opacity-80 max-md:h-6 max-md:w-6"
-                aria-label="LinkedIn"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image src="/images/icons/linkedin.svg" alt="" width={32} height={32} unoptimized className="h-full w-full object-cover object-center" />
-              </a>
-              <a
-                href="https://www.youtube.com/@sustainabledevelopmentadvo7259"
-                className="social-link h-8 w-8 transition-[filter] hover:opacity-80 max-md:h-6 max-md:w-6"
-                aria-label="YouTube"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Image src="/images/icons/youtube.svg" alt="" width={32} height={32} unoptimized className="h-full w-full object-cover object-center" />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <div className="contact-form-wrapper w-full">
-          <form className="contact-form flex flex-col gap-5 max-md:gap-3" id="contactForm">
-            <div className="form-group">
-              <label htmlFor="fullName" className="form-label text-base font-medium max-md:text-sm">
-                Full Name
-              </label>
-              <input
-                type="text"
-                id="fullName"
-                name="fullName"
-                className="form-input mt-1 w-full rounded border border-gray-200 px-3 py-3.5 font-sans text-base text-gray-900 transition-colors placeholder:text-gray-400 focus:border-primary-400 focus:outline-none max-lg:px-3 max-lg:py-3 max-lg:text-[15px] max-md:text-sm"
-                placeholder="John Doe"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email" className="form-label text-base font-medium max-md:text-sm">
-                Email Address
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                className="form-input mt-1 w-full rounded border border-gray-200 px-3 py-3.5 font-sans text-base text-gray-900 transition-colors placeholder:text-gray-400 focus:border-primary-400 focus:outline-none max-lg:px-3 max-lg:py-3 max-lg:text-[15px] max-md:text-sm"
-                placeholder="example@gmail.com"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="message" className="form-label text-base font-medium max-md:text-sm">
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                className="form-textarea mt-1 min-h-[200px] w-full resize-none rounded border border-gray-200 px-3 py-3.5 font-sans text-base text-gray-900 transition-colors placeholder:text-gray-400 focus:border-primary-400 focus:outline-none max-lg:px-3 max-lg:py-3 max-lg:text-[15px] max-md:text-sm"
-                placeholder="Abimbola"
-                rows={6}
-                required
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="form-submit-btn w-full cursor-pointer rounded-lg border-0 bg-primary px-8 py-4 font-sans text-lg font-medium text-gray-50 transition-colors hover:bg-primary-400 max-lg:px-7 max-lg:py-3.5 max-lg:text-[17px] max-md:text-base"
-            >
-              Send Message
-            </button>
-          </form>
-        </div>
-      </section>
     </>
   );
 }
