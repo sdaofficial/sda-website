@@ -11,7 +11,7 @@ const HEADER_PAGES = {
   about: { label: 'About us', path: '/about' },
   joinUs: { label: 'Get involved', path: '/join-us' },
   blog: { label: 'Blog', path: '/blog' },
-  contact: { label: 'Contact Us', path: '/#contact' },
+  contact: { label: 'Contact Us', path: '#contact' },
 };
 
 const HEADER_NAV_ORDER = ['home', 'about', 'joinUs', 'blog', 'contact'];
@@ -30,10 +30,22 @@ function getActivePageId(pathname) {
 export function SiteHeader() {
   const pathname = usePathname();
   const activePageId = getActivePageId(pathname || '/');
+  const contactHref = `${pathname || '/'}#contact`;
   const [menuOpen, setMenuOpen] = useState(false);
 
   const closeMenu = useCallback(() => setMenuOpen(false), []);
   const toggleMenu = useCallback(() => setMenuOpen((o) => !o), []);
+  const goToContact = useCallback(
+    (event) => {
+      closeMenu();
+      const section = document.getElementById('contact');
+      if (!section) return;
+      event.preventDefault();
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.history.pushState(null, '', contactHref);
+    },
+    [closeMenu, contactHref]
+  );
 
   useEffect(() => {
     const prev = document.body.style.overflow;
@@ -103,7 +115,8 @@ export function SiteHeader() {
                 return (
                   <Link
                     key={pageId}
-                    href={path}
+                    href={contactHref}
+                    onClick={goToContact}
                     className="contact-btn rounded-md border border-primary-400 px-6 py-2.5 font-medium text-primary-400 no-underline transition-colors hover:bg-primary-400 hover:text-white max-lg:px-5 max-lg:py-2 max-lg:text-[15px]"
                   >
                     {label}
@@ -164,9 +177,9 @@ export function SiteHeader() {
               return (
                 <Link
                   key={pageId}
-                  href={path}
+                  href={contactHref}
                   className="contact-btn py-2 font-medium text-gray-800 no-underline transition-colors hover:text-primary-500"
-                  onClick={closeMenu}
+                  onClick={goToContact}
                 >
                   {label}
                 </Link>

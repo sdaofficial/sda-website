@@ -15,7 +15,7 @@ export function ContactSection({ section, socials = [] }) {
 
   return (
     <section
-      className="contact-section grid grid-cols-2 items-stretch gap-[120px] border-b border-gray-200 bg-gray-50 px-20 py-[100px] text-gray-900 max-lg:gap-20 max-lg:px-[50px] max-lg:py-20 max-md:grid-cols-1 max-md:items-start max-md:gap-5 max-md:px-6 max-md:pb-6 max-md:pt-10"
+      className="contact-section scroll-mt-24 grid grid-cols-2 items-stretch gap-[120px] border-b border-gray-200 bg-gray-50 px-20 py-[100px] text-gray-900 max-lg:gap-20 max-lg:px-[50px] max-lg:py-20 max-md:grid-cols-1 max-md:items-start max-md:gap-5 max-md:px-6 max-md:pb-6 max-md:pt-10"
       id="contact"
       aria-labelledby={section.internalName || undefined}
       data-layout="form"

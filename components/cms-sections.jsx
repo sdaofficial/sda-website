@@ -1,6 +1,11 @@
 import { ContactSection } from '@/components/contact-section';
+import { GoalsSection } from '@/components/goals-section';
+import { HistorySection } from '@/components/history-section';
 import { PageSectionBlock } from '@/components/page-section-block';
 import { PartnershipsSection } from '@/components/partnerships-section';
+import { QuoteSection } from '@/components/quote-section';
+import { SpeechSection } from '@/components/speech-section';
+import { TeamSection } from '@/components/team-section';
 import { TestimonialsSection } from '@/components/testimonials-section';
 import { UpcomingEventsSection } from '@/components/upcoming-events-section';
 import { PagePreview } from '@/components/page-preview';
@@ -30,6 +35,21 @@ export async function CmsSections({ slug }) {
     }
     if (section.layout === 'form') {
       return <ContactSection key={key} section={section} socials={socials} />;
+    }
+    if (section.layout === 'history') {
+      return <HistorySection key={key} section={section} />;
+    }
+    if (section.layout === 'quote') {
+      return <QuoteSection key={key} section={section} />;
+    }
+    if (section.layout === 'goals') {
+      return <GoalsSection key={key} section={section} />;
+    }
+    if (section.layout === 'speech' || section.layout === 'staffMessage') {
+      return <SpeechSection key={key} section={section} />;
+    }
+    if (section.layout === 'team') {
+      return <TeamSection key={key} section={section} />;
     }
     return <PageSectionBlock key={key} section={section} />;
   });

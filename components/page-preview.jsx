@@ -1,14 +1,4 @@
 const PREVIEWS = {
-  about: {
-    eyebrow: 'About us',
-    heading: 'A student community built around the SDGs',
-    body: 'This preview stays in place until About sections are added in Supabase. Those sections will replace this screen, in position order.',
-    cards: [
-      { title: 'Who we are', body: 'Students at the University of Lagos working as one community.' },
-      { title: 'What we stand for', body: 'Oneness, empathy, transparency, and accountability.' },
-      { title: 'How we work', body: 'Advocacy and projects that move the Sustainable Development Goals forward.' },
-    ],
-  },
   blog: {
     eyebrow: 'Blog',
     heading: 'Stories from the SDA community',

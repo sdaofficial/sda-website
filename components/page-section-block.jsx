@@ -123,9 +123,10 @@ function SectionSkeleton() {
   );
 }
 
-function CtaLink({ label, url, openInNewTab }) {
+function CtaLink({ label, url, openInNewTab, className }) {
   if (!label) return null;
   const btn =
+    className ??
     'inline-block rounded-full bg-primary px-8 py-3.5 text-base font-bold text-white no-underline transition-colors hover:bg-primary-400';
   if (url) {
     const target = openInNewTab ? '_blank' : '_self';
@@ -146,9 +147,82 @@ function CtaLink({ label, url, openInNewTab }) {
   return <span className={btn}>{label}</span>;
 }
 
+function HeroSection({ section }) {
+  const image = (section?.images ?? []).find((img) => img?.url);
+  const cta = section?.ctas?.[0];
+  const highlights = section?.headingHighlights ?? [];
+
+  return (
+    <section
+      className="relative isolate flex min-h-[480px] items-center overflow-hidden bg-black text-white lg:min-h-[560px]"
+      aria-labelledby={section?.internalName || undefined}
+      data-layout="hero"
+      data-theme={section?.theme || 'dark'}
+    >
+      {image?.url ? (
+        <Image
+          src={image.url}
+          alt={imageAlt(image)}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+          unoptimized={isVectorImage(image)}
+        />
+      ) : null}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/80 to-black/65" aria-hidden />
+      <Image
+        src="/images/icons/zap-1.svg"
+        alt=""
+        width={131}
+        height={63}
+        unoptimized
+        className="pointer-events-none absolute -right-8 top-10 z-[1] h-auto w-20 rotate-90 max-md:right-4 max-md:top-4 max-md:w-14"
+      />
+      <Image
+        src="/images/icons/zap-2.svg"
+        alt=""
+        width={108}
+        height={10}
+        unoptimized
+        className="pointer-events-none absolute bottom-8 -left-5 z-[1] h-auto w-24 -rotate-[20deg] max-md:bottom-5 max-md:left-5 max-md:w-16"
+      />
+      <div className="relative z-[1] w-full px-20 py-20 max-lg:px-[50px] max-md:px-6 max-md:py-16">
+        {section?.eyebrow ? <p className="mb-3 text-sm font-medium text-white">{section.eyebrow}</p> : null}
+        {section?.heading ? (
+          <h1
+            id={section?.internalName}
+            className="max-w-[11em] text-[56px] font-bold leading-[1.05] tracking-tight text-white max-lg:text-5xl max-md:max-w-none max-md:text-[34px]"
+          >
+            {renderHeading({
+              heading: section.heading,
+              highlightWords: highlights,
+              highlightClassName: 'text-primary',
+            })}
+          </h1>
+        ) : null}
+        {cta?.label ? (
+          <div className="mt-8">
+            <CtaLink
+              label={cta.label}
+              url={cta.url}
+              openInNewTab={cta.openInNewTab}
+              className="inline-block rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-white no-underline transition-colors hover:bg-primary-400"
+            />
+          </div>
+        ) : null}
+      </div>
+    </section>
+  );
+}
+
 export function PageSectionBlock({ section }) {
   if (!section) {
     return <SectionSkeleton theme="light" />;
+  }
+
+  if (section.layout === 'hero') {
+    return <HeroSection section={section} />;
   }
 
   const layout =
