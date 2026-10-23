@@ -14,7 +14,7 @@ const HEADER_PAGES = {
   contact: { label: 'Contact Us', path: '#contact' },
 };
 
-const HEADER_NAV_ORDER = ['home', 'about', 'joinUs', 'contact']; // 'blog'
+const HEADER_NAV_ORDER = ['home', 'about', 'joinUs', 'blog', 'contact'];
 
 function getActivePageId(pathname) {
   const current = pathname || '/';

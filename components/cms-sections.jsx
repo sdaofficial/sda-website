@@ -8,6 +8,7 @@ import { SpeechSection } from '@/components/speech-section';
 import { TeamSection } from '@/components/team-section';
 import { TestimonialsSection } from '@/components/testimonials-section';
 import { UpcomingEventsSection } from '@/components/upcoming-events-section';
+import { BlogPostsSection } from '@/components/blog-posts-section';
 import { ClubActivitiesSection } from '@/components/club-activities-section';
 import { DifferenceSection } from '@/components/difference-section';
 import { VolunteerOpportunitiesSection } from '@/components/volunteer-opportunities-section';
@@ -62,6 +63,9 @@ export async function CmsSections({ slug }) {
     }
     if (section.layout === 'difference') {
       return <DifferenceSection key={key} section={section} />;
+    }
+    if (section.layout === 'posts') {
+      return <BlogPostsSection key={key} section={section} />;
     }
     return <PageSectionBlock key={key} section={section} />;
   });
