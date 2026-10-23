@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 const SOCIAL_ICONS = {
   instagram: '/images/icons/instagram.svg',
@@ -47,7 +48,7 @@ export function ContactSection({ section, socials = [] }) {
             <h3 className="contact-social-heading mb-3 text-base font-bold max-md:text-lg">Follow us on</h3>
             <div className="contact-social-links flex items-center gap-8 max-md:gap-6">
               {links.map((link) => (
-                <a
+                <Link
                   key={link.platform}
                   href={link.url}
                   className="social-link h-8 w-8 transition-opacity hover:opacity-80 max-md:h-6 max-md:w-6"
@@ -63,7 +64,7 @@ export function ContactSection({ section, socials = [] }) {
                     unoptimized
                     className="h-full w-full object-contain"
                   />
-                </a>
+                </Link>
               ))}
             </div>
           </div>

@@ -14,7 +14,7 @@ const HEADER_PAGES = {
   contact: { label: 'Contact Us', path: '#contact' },
 };
 
-const HEADER_NAV_ORDER = ['home', 'about', 'contact']; // 'home', 'about', 'joinUs', 'blog', 'contact'
+const HEADER_NAV_ORDER = ['home', 'about', 'joinUs', 'contact']; // 'blog'
 
 function getActivePageId(pathname) {
   const current = pathname || '/';
@@ -89,7 +89,7 @@ export function SiteHeader() {
               />
               <span className="logo-text text-[12px] font-semibold leading-4 text-primary-400 max-lg:text-[11px]">
                 SUSTAINABLE <br />
-                DEVELOPMENT ADVOCATE
+                DEVELOPMENT ADVOCATES
               </span>
             </Link>
           </div>
@@ -157,7 +157,7 @@ export function SiteHeader() {
               />
               <span className="logo-text text-[12px] font-semibold leading-4 text-primary-400">
                 SUSTAINABLE <br />
-                DEVELOPMENT ADVOCATE
+                DEVELOPMENT ADVOCATES
               </span>
             </Link>
           </div>

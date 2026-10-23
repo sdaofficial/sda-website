@@ -205,7 +205,12 @@ function HeroSection({ section }) {
             id={section?.internalName}
             data-anim="rise"
             style={{ '--d': '120ms' }}
-            className="max-w-[11em] text-[56px] font-bold leading-[1.05] tracking-tight text-white max-lg:text-5xl max-md:max-w-none max-md:text-[34px]"
+            className={cn(
+              'text-[56px] font-bold leading-[1.05] tracking-tight text-white max-lg:text-5xl max-md:text-[34px]',
+              section.heading?.includes('\n')
+                ? 'max-w-[18em] whitespace-pre-line max-md:max-w-none'
+                : 'max-w-[11em] max-md:max-w-none'
+            )}
           >
             {renderHeading({
               heading: section.heading,

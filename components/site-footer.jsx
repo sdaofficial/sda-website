@@ -19,9 +19,9 @@ function FooterLink({ href, className, children }) {
   }
 
   return (
-    <a href={href} className={className} target="_blank" rel="noopener noreferrer">
+    <Link href={href} className={className} target="_blank" rel="noopener noreferrer">
       {children}
-    </a>
+    </Link>
   );
 }
 
@@ -57,7 +57,7 @@ export async function SiteFooter() {
 
           <div className="mt-auto flex items-center gap-6 pt-10">
             {links.map((link) => (
-              <a
+              <Link
                 key={link.platform}
                 href={link.url}
                 className="social-link h-6 w-6 invert transition-opacity hover:opacity-80"
@@ -73,7 +73,7 @@ export async function SiteFooter() {
                   unoptimized
                   className="h-full w-full object-contain"
                 />
-              </a>
+              </Link>
             ))}
           </div>
         </div>
