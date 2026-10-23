@@ -1,80 +1,92 @@
-# SDA - Sustainable Development Advocate
+# SDA - Sustainable Development Advocates
+* Latest Deployment for Next JS Migration: 22 Oct 2026 | 3:57 PM
 
-This website showcases the mission, events, team members, and joining information of the Sustainable Development Advocate organization at the University of Lagos.
-
+This website showcases the mission, events, team members, and joining information of the Sustainable Development Advocates organization at the University of Lagos.
 
 ## Technologies Used
 
-- **HTML5**: Semantic markup
-- **CSS3**: Modern CSS with CSS variables
-- **Vanilla JavaScript**: No frameworks, pure JavaScript for all interactivity
-- **JSON**: Data storage for events and team members
+- **Next.js 15** (App Router)
+- **React 19** and **TypeScript**
+- **Tailwind CSS** (utilities; legacy layout CSS kept, Preflight off to avoid double resets)
+- **Theme** — colors and font stacks defined only in `tailwind.config.ts` (no `:root` CSS variables)
+- **JSON** data in `data/` for events and team members
+- **Supabase** for homepage CMS content and media
 
 ## Getting Started
+
+### Prerequisites
+
+- Node.js 20.19+ or 22.13+ (recommended for tooling compatibility)
+
 ### Installation
 
-1. Clone or download this repository
-2. Navigate to the project directory
-3. Start a local web server:
+```bash
+npm install
+```
 
-   **Using Python:**
-   ```bash
-   # Python 3
-   python -m http.server 8000
-   ```
+### Development
 
-   **Using Node.js (http-server):**
-   ```bash
-   npx http-server
-   ```
+```bash
+npm run dev
+```
 
-   **Using PHP:**
-   ```bash
-   php -S localhost:8000
-   ```
-4. Open your browser and navigate to `http://localhost:8000`
+Open [http://localhost:3000](http://localhost:3000).
 
+### Production
+
+```bash
+npm run build
+npm start
+```
+
+## Homepage content
+
+The homepage CMS blocks are loaded from Supabase by the slug `home`. Team members, Join Us events, and the hardcoded homepage sections stay in this repo.
+
+Set these in `.env.local`:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
+```
+
+On a new Supabase project, run these in the SQL editor in order:
+
+- `supabase/sql/001_schema.sql`
+- `supabase/sql/002_rls.sql`
+- `supabase/sql/003_storage.sql`
+- `supabase/sql/004_get_page.sql`
+
+## Project layout
+
+- `app/` — App Router pages (`/`, `/join-us`, etc.) and global styles entry
+- `components/` — Header, footer, homepage sections, team carousel, join-us events
+- `lib/` — Supabase server client and homepage loader
+- `supabase/sql/` — schema, access policies, storage, and the page loader
+- `data/` — `team-members.json` and `events.json`
+- `public/` — Static assets (images and fonts)
+- `tailwind.config.ts` — **Colors and fonts** (`theme.extend`)
+- `app/globals.css` — Tailwind entry, Satoshi import, base reset, and `.section` horizontal padding utility; page UI lives in components with Tailwind
 
 ## Customization
 
-### Colors
+### Colors and fonts
 
-All colors are defined as CSS variables in `css/global.css`:
+1. Edit **`tailwind.config.ts`** — `theme.extend.colors`, `theme.extend.fontFamily`, and the `fontSans` array at the top.
 
-```css
-:root {
-  --color-primary: #DB5026;
-  --color-primary-600: #C54822;
-  --color-primary-400: #F1582A;
-  /* ... more color variables */
-}
-```
+Use Tailwind utilities in `app/` and `components/` (for example `text-primary-600`, `bg-gray-50`, `font-sans`). The root layout uses `font-sans bg-white text-gray-800`.
 
-### Fonts
+Layout chrome (header, footer, home page, team carousel) uses Tailwind utility classes in `components/` and `app/page.tsx`. The join-us route is styled the same way.
 
-The project uses the **Satoshi** font family, located in `resources/fonts/satoshi/`. The font is imported in `css/global.css`.
+### Fonts (files)
 
+Satoshi is loaded from `public/fonts/satoshi/css/satoshi.css`. Add the font files under `public/fonts/satoshi/fonts/` if they are not already present.
 
-### Adding Team Members
-
-Edit `team-members.json` to add or modify team members. The structure supports multiple tabs (e.g., executives, members):
-
-```json
-{
-  "executives": [
-    {
-      "name": "John Doe",
-      "title": "President",
-      "image": "resources/images/people/john-doe.png"
-    }
-  ]
-}
-```
-
-
-**Built with ❤️ for SDA**
 ---
+
+**Built with love for Sustainable Development Advocates - SDA Unilag**
+
 - Instagram: [@sdaunilag](https://instagram.com/sdaunilag)
 - Twitter: [@sdaunilag](https://twitter.com/sdaunilag)
 - LinkedIn: [SDA Unilag](https://www.linkedin.com/company/sdaunilag)
-- YouTube: [Sustainable Development Advocate](https://www.youtube.com/@sustainabledevelopmentadvo7259)
+- YouTube: [Sustainable Development Advocates](https://www.youtube.com/@sustainabledevelopmentadvo7259)
