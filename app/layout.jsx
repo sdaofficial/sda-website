@@ -1,6 +1,5 @@
-import { MotionRoot } from '@/components/motion-root';
 import { SiteFooter } from '@/components/site-footer';
-import { SiteHeader } from '@/components/site-header';
+import { SiteFrame } from '@/components/site-frame';
 import './globals.css';
 
 export const metadata = {
@@ -22,9 +21,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="motion">
       <body className="font-sans bg-white text-gray-800 antialiased">
-        <SiteHeader />
-        <MotionRoot>{children}</MotionRoot>
-        <SiteFooter />
+        <SiteFrame footer={<SiteFooter />}>{children}</SiteFrame>
         <noscript>
           <style>{'[data-anim]{opacity:1!important;transform:none!important}'}</style>
         </noscript>

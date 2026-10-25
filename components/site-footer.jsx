@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import { getSiteFooter, getSocialLinks } from '@/lib/pages';
+import { getContact, getSocialLinks } from '@/lib/content';
 
 const SOCIAL_ICONS = {
   instagram: '/images/icons/instagram.svg',
@@ -26,7 +26,12 @@ function FooterLink({ href, className, children }) {
 }
 
 export async function SiteFooter() {
-  const [footer, socials] = await Promise.all([getSiteFooter(), getSocialLinks()]);
+  const [contact, socials] = await Promise.all([getContact(), getSocialLinks()]);
+  const details = [
+    ['Office address:', contact?.officeAddress],
+    ['Email address:', contact?.email],
+    ['Phone number:', contact?.phone],
+  ].filter(([, body]) => body);
   const links = socials.filter((link) => SOCIAL_ICONS[link.platform] && link.url);
   const navClass =
     'text-base font-medium text-gray-100 no-underline transition-colors visited:text-gray-100 hover:text-primary max-md:text-sm';
@@ -53,7 +58,10 @@ export async function SiteFooter() {
             </span>
           </Link>
 
-          <p className="mt-8 max-w-[340px] text-sm font-medium leading-6 text-gray-300 max-md:max-w-none">{footer.blurb}</p>
+          <p className="mt-8 max-w-[340px] text-sm font-medium leading-6 text-gray-300 max-md:max-w-none">
+            Sustainable Development Advocates (SDA) is a community of committed student-changemakers, with oneness,
+            empathy, transparency, and accountability, forming the foundation of our shared vision.
+          </p>
 
           <div className="mt-auto flex items-center gap-6 pt-10">
             {links.map((link) => (
@@ -79,24 +87,33 @@ export async function SiteFooter() {
         </div>
 
         <nav className="flex flex-col justify-between gap-6 py-1 max-md:gap-4">
-          {footer.links.map((link) => (
-            <FooterLink key={`${link.label}-${link.url}`} href={link.url} className={navClass}>
-              {link.label}
-            </FooterLink>
-          ))}
+          <FooterLink href="/" className={navClass}>
+            Home
+          </FooterLink>
+          <FooterLink href="/about" className={navClass}>
+            About Us
+          </FooterLink>
+          <FooterLink href="/join-us" className={navClass}>
+            Get Involved
+          </FooterLink>
+          <FooterLink href="/blog" className={navClass}>
+            Blog
+          </FooterLink>
         </nav>
 
         <div className="flex flex-col justify-between gap-6 max-md:gap-5">
-          {footer.details.map((detail) => (
-            <div key={`${detail.label}-${detail.body}`}>
-              <h2 className="text-sm font-bold text-primary">{detail.label}</h2>
-              <p className="mt-1 whitespace-pre-line text-sm font-medium leading-6 text-gray-100">{detail.body}</p>
+          {details.map(([label, body]) => (
+            <div key={label}>
+              <h2 className="text-sm font-bold text-primary">{label}</h2>
+              <p className="mt-1 whitespace-pre-line text-sm font-medium leading-6 text-gray-100">{body}</p>
             </div>
           ))}
         </div>
       </div>
 
-      <p className="mt-14 text-center text-sm text-gray-400 max-md:mt-10 max-md:text-xs">{footer.copyright}</p>
+      <p className="mt-14 text-center text-sm text-gray-400 max-md:mt-10 max-md:text-xs">
+        © Copyright 2026, All Rights Reserved by Sustainable Development Advocates
+      </p>
 
       <Image
         src="/images/icons/curly-arrow.svg"
