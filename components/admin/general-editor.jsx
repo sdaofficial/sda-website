@@ -1,235 +1,150 @@
 'use client';
 
-import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-import { publishHomeHero } from '@/app/admin/actions';
+import { deleteSocialLink, saveGeneral } from '@/app/admin/actions';
+import { AddButton, AdminScreen, Card, Field, moveItem, newId, RowActions, useAdminForm } from '@/components/admin/ui';
 
-const DRAFT_KEY = 'sda-admin-draft';
+const LINK_LABELS = {
+  become_a_member: 'Become a member',
+  donate: 'Give to the Cause',
+  get_involved: 'Get Involved',
+  newsletter: 'Newsletter',
+  JOURNEY_0: 'Watch our Story',
+  JOIN_US_0: 'Home community button',
+  JOIN_US_HERO_0: 'Join Us hero button',
+  JOIN_US_MEMBER_0: 'Join Us member button',
+  ABOUT_HERO_0: 'About hero button',
+  ABOUT_JOIN_US_0: 'About community button',
+  CONTACT_0: 'Contact link 1',
+  CONTACT_1: 'Contact link 2',
+  CONTACT_2: 'Contact link 3',
+  CONTACT_3: 'Contact link 4',
+};
 
-const inputClass =
+const PLATFORMS = [
+  { value: 'instagram', label: 'Instagram' },
+  { value: 'x', label: 'X' },
+  { value: 'linkedin', label: 'LinkedIn' },
+  { value: 'youtube', label: 'YouTube' },
+];
+
+const selectClass =
   'mt-1 w-full rounded-lg border border-solid border-gray-200 bg-white px-3 py-2.5 text-sm text-gray-900 outline-none focus:border-primary';
 
-function Field({ label, value, onChange, multiline }) {
-  return (
-    <label className="block text-sm font-medium text-gray-700">
-      {label}
-      {multiline ? (
-        <textarea value={value} onChange={(event) => onChange(event.target.value)} rows={4} className={inputClass} />
-      ) : (
-        <input value={value} onChange={(event) => onChange(event.target.value)} className={inputClass} />
-      )}
-    </label>
-  );
-}
-
-function updateMetric(metrics, index, patch) {
-  return metrics.map((metric, metricIndex) => (metricIndex === index ? { ...metric, ...patch } : metric));
-}
-
-function updateGrant(metrics, metricIndex, grantIndex, patch) {
-  return metrics.map((metric, index) => {
-    if (index !== metricIndex) return metric;
-    return {
-      ...metric,
-      grants: metric.grants.map((grant, current) => (current === grantIndex ? { ...grant, ...patch } : grant)),
-    };
-  });
-}
-
-export function GeneralEditor({ hero }) {
-  const [draft, setDraft] = useState(hero);
-  const [status, setStatus] = useState('');
-  const [publishing, setPublishing] = useState(false);
+export function GeneralEditor({ data }) {
+  const { status, setStatus, saving, run } = useAdminForm();
+  const [contact, setContact] = useState(data.contact);
+  const [links, setLinks] = useState(data.links);
+  const [socials, setSocials] = useState(data.socials);
 
   useEffect(() => {
-    const raw = window.localStorage.getItem(DRAFT_KEY);
-    if (!raw) return;
-    try {
-      const saved = JSON.parse(raw);
-      if (saved?.general) setDraft(saved.general);
-    } catch {
-      window.localStorage.removeItem(DRAFT_KEY);
-    }
-  }, []);
+    setContact(data.contact);
+    setLinks(data.links);
+    setSocials(data.socials);
+  }, [data]);
 
-  function save() {
-    let current = {};
-    try {
-      current = JSON.parse(window.localStorage.getItem(DRAFT_KEY) || '{}');
-    } catch {
-      current = {};
+  async function removeSocial(id) {
+    if (!String(id).startsWith('new:')) {
+      const result = await deleteSocialLink(id);
+      if (!result.ok) {
+        setStatus(result.error);
+        return;
+      }
     }
-    window.localStorage.setItem(DRAFT_KEY, JSON.stringify({ ...current, general: draft }));
-    setStatus('Saved. These changes stay stashed until you publish.');
-  }
-
-  async function publish() {
-    setPublishing(true);
-    setStatus('');
-    const result = await publishHomeHero(draft);
-    setPublishing(false);
-    if (!result.ok) {
-      setStatus(result.error);
-      return;
-    }
-    window.localStorage.removeItem(DRAFT_KEY);
-    setStatus('Published. The live homepage is using these changes.');
-  }
-
-  if (!draft) {
-    return <p className="p-8 text-sm text-gray-600">The homepage hero is not in Supabase yet.</p>;
+    setSocials((current) => current.filter((link) => link.id !== id));
+    setStatus('Deleted.');
   }
 
   return (
-    <div>
-      <header className="flex items-center justify-between border-b border-solid border-gray-200 bg-white px-8 py-4">
-        <h1 className="text-lg font-semibold text-gray-900">General</h1>
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={save}
-            className="cursor-pointer rounded-lg border border-solid border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-800"
-          >
-            Save
-          </button>
-          <button
-            type="button"
-            onClick={publish}
-            disabled={publishing}
-            className="cursor-pointer rounded-lg border-0 bg-primary px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
-          >
-            {publishing ? 'Publishing…' : 'Publish'}
-          </button>
-        </div>
-      </header>
+    <AdminScreen
+      title="General"
+      status={status}
+      saving={saving}
+      onSave={() => run(() => saveGeneral({ contact, links, socials }))}
+    >
+      <Card title="Contact" hint="Shown in the site footer.">
+        <Field
+          label="Office address"
+          value={contact.officeAddress}
+          multiline
+          onChange={(officeAddress) => setContact({ ...contact, officeAddress })}
+        />
+        <Field label="Email" value={contact.email} onChange={(email) => setContact({ ...contact, email })} />
+        <Field label="Phone" value={contact.phone} multiline onChange={(phone) => setContact({ ...contact, phone })} />
+      </Card>
 
-      <div className="mx-auto flex max-w-3xl flex-col gap-6 p-8">
-        {status ? <p className="text-sm text-gray-600">{status}</p> : null}
-
-        <section className="rounded-2xl border border-solid border-gray-200 bg-white p-6">
-          <h2 className="text-base font-semibold text-gray-900">Volunteer form</h2>
-          <p className="mt-1 text-sm text-gray-500">The button label stays “Become a member”. This is the link it opens.</p>
-          <div className="mt-4">
-            <Field label="Become a member link" value={draft.ctaUrl} onChange={(ctaUrl) => setDraft({ ...draft, ctaUrl })} />
-          </div>
-          {draft.images?.length ? (
-            <div className="mt-6">
-              <p className="text-sm font-medium text-gray-700">Images</p>
-              <div className="mt-3 flex flex-wrap gap-3">
-                {draft.images.map((slot) =>
-                  slot.image?.url ? (
-                    <div key={slot.id} className="relative h-28 w-24 overflow-hidden rounded-xl bg-gray-100">
-                      <Image src={slot.image.url} alt={slot.image.alt || ''} fill className="object-cover" sizes="96px" />
-                    </div>
-                  ) : null
-                )}
-              </div>
+      <Card title="Links" hint="Button destinations. The label on the page stays in the code. The journey video URL is on Media.">
+        {links.map((link, index) => (
+          <div key={link.key} className="rounded-xl border border-solid border-gray-200 p-4">
+            <p className="text-sm font-semibold text-gray-900">{LINK_LABELS[link.key] || link.key}</p>
+            <p className="mt-1 text-xs text-gray-400">{link.key}</p>
+            <div className="mt-3">
+              <Field
+                label="URL"
+                value={link.url}
+                onChange={(url) => setLinks(links.map((item, itemIndex) => (itemIndex === index ? { ...item, url } : item)))}
+              />
             </div>
-          ) : null}
-        </section>
-
-        <section className="rounded-2xl border border-solid border-gray-200 bg-white p-6">
-          <h2 className="text-base font-semibold text-gray-900">Impact</h2>
-          <div className="mt-5 flex flex-col gap-4">
-            {draft.metrics.map((metric, index) => (
-              <article key={metric.id} className="rounded-xl border border-solid border-gray-200 p-4">
-                <h3 className="text-sm font-semibold text-gray-900">
-                  {metric.value} {metric.label}
-                </h3>
-                <div className="mt-4 grid gap-4 sm:grid-cols-2">
-                  <Field
-                    label="Value"
-                    value={metric.value}
-                    onChange={(value) => setDraft({ ...draft, metrics: updateMetric(draft.metrics, index, { value }) })}
-                  />
-                  <Field
-                    label="Label"
-                    value={metric.label}
-                    onChange={(label) => setDraft({ ...draft, metrics: updateMetric(draft.metrics, index, { label }) })}
-                  />
-                </div>
-                <div className="mt-4 flex flex-col gap-4">
-                  <Field
-                    label="Modal heading"
-                    value={metric.heading}
-                    onChange={(heading) => setDraft({ ...draft, metrics: updateMetric(draft.metrics, index, { heading }) })}
-                  />
-                  <Field
-                    label="Modal description"
-                    value={metric.body}
-                    multiline
-                    onChange={(body) => setDraft({ ...draft, metrics: updateMetric(draft.metrics, index, { body }) })}
-                  />
-                  <div className="grid gap-4 sm:grid-cols-2">
-                    <Field
-                      label="Modal link label"
-                      value={metric.ctaText}
-                      onChange={(ctaText) => setDraft({ ...draft, metrics: updateMetric(draft.metrics, index, { ctaText }) })}
-                    />
-                    <Field
-                      label="Modal link"
-                      value={metric.ctaUrl}
-                      onChange={(ctaUrl) => setDraft({ ...draft, metrics: updateMetric(draft.metrics, index, { ctaUrl }) })}
-                    />
-                  </div>
-                </div>
-                {metric.grants?.length ? (
-                  <div className="mt-5 flex flex-col gap-4 border-t border-solid border-gray-100 pt-4">
-                    <p className="text-sm font-medium text-gray-700">Grants</p>
-                    {metric.grants.map((grant, grantIndex) => (
-                      <div key={grant.id} className="rounded-lg bg-gray-50 p-4">
-                        <div className="flex gap-3">
-                          {grant.image?.url ? (
-                            <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg bg-white">
-                              <Image src={grant.image.url} alt="" fill className="object-cover" sizes="56px" />
-                            </div>
-                          ) : null}
-                          <div className="min-w-0 flex-1">
-                            <Field
-                              label="Name"
-                              value={grant.name}
-                              onChange={(name) =>
-                                setDraft({ ...draft, metrics: updateGrant(draft.metrics, index, grantIndex, { name }) })
-                              }
-                            />
-                          </div>
-                        </div>
-                        <div className="mt-3">
-                          <Field
-                            label="Description"
-                            value={grant.body}
-                            multiline
-                            onChange={(body) =>
-                              setDraft({ ...draft, metrics: updateGrant(draft.metrics, index, grantIndex, { body }) })
-                            }
-                          />
-                        </div>
-                        <div className="mt-3 grid gap-4 sm:grid-cols-2">
-                          <Field
-                            label="Link label"
-                            value={grant.linkLabel}
-                            onChange={(linkLabel) =>
-                              setDraft({ ...draft, metrics: updateGrant(draft.metrics, index, grantIndex, { linkLabel }) })
-                            }
-                          />
-                          <Field
-                            label="Link"
-                            value={grant.linkUrl}
-                            onChange={(linkUrl) =>
-                              setDraft({ ...draft, metrics: updateGrant(draft.metrics, index, grantIndex, { linkUrl }) })
-                            }
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : null}
-              </article>
-            ))}
+            <label className="mt-3 flex items-center gap-2 text-sm text-gray-700">
+              <input
+                type="checkbox"
+                checked={link.openInNewTab}
+                onChange={(event) =>
+                  setLinks(links.map((item, itemIndex) => (itemIndex === index ? { ...item, openInNewTab: event.target.checked } : item)))
+                }
+              />
+              Open in a new tab
+            </label>
           </div>
-        </section>
-      </div>
-    </div>
+        ))}
+      </Card>
+
+      <Card title="Social links" hint="Instagram, X, LinkedIn, and YouTube icons in the footer.">
+        {socials.map((link, index) => (
+          <div key={link.id} className="rounded-xl border border-solid border-gray-200 p-4">
+            <RowActions
+              index={index}
+              count={socials.length}
+              onMove={(itemIndex, direction) => setSocials(moveItem(socials, itemIndex, direction))}
+              onDelete={() => removeSocial(link.id)}
+            />
+            <label className="mt-3 block text-sm font-medium text-gray-700">
+              Platform
+              <select
+                value={link.platform}
+                onChange={(event) =>
+                  setSocials(socials.map((item, itemIndex) => (itemIndex === index ? { ...item, platform: event.target.value } : item)))
+                }
+                className={selectClass}
+              >
+                {PLATFORMS.map((platform) => (
+                  <option key={platform.value} value={platform.value}>
+                    {platform.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="mt-3 flex flex-col gap-3">
+              <Field
+                label="Label"
+                value={link.label}
+                onChange={(label) => setSocials(socials.map((item, itemIndex) => (itemIndex === index ? { ...item, label } : item)))}
+              />
+              <Field
+                label="URL"
+                value={link.url}
+                onChange={(url) => setSocials(socials.map((item, itemIndex) => (itemIndex === index ? { ...item, url } : item)))}
+              />
+            </div>
+          </div>
+        ))}
+        <AddButton
+          onClick={() => setSocials([...socials, { id: newId(), platform: 'instagram', label: 'Instagram', url: 'https://' }])}
+        >
+          Add social link
+        </AddButton>
+      </Card>
+    </AdminScreen>
   );
 }

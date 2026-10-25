@@ -124,7 +124,7 @@ export function TeamSection({ section }) {
               width={100}
               height={100}
               unoptimized
-              className="zap-icon absolute top-[80%] -right-2.5 z-[5] w-[100px] max-md:left-1/2 max-md:right-auto max-md:top-[90%] max-md:w-[100px] max-md:-translate-x-1/2"
+              className="zap-icon absolute top-1 right-1/2 translate-x-1/2 z-[5] w-[80px] max-md:w-[80px]"
             />
           </div>
         ) : null}
@@ -164,7 +164,7 @@ export function TeamSection({ section }) {
         <div className="team-carousel-wrapper relative flex items-center gap-4 max-md:gap-2">
           <button
             type="button"
-            className="carousel-btn carousel-btn-prev flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-gray-600 bg-white transition-all hover:bg-primary-500-alpha disabled:cursor-not-allowed disabled:opacity-50 max-md:h-8 max-md:w-8"
+            className="carousel-btn carousel-btn-prev flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-solid border-gray-600 bg-white transition-all hover:bg-primary-500-alpha disabled:cursor-not-allowed disabled:opacity-50 max-md:h-8 max-md:w-8"
             aria-label="Previous"
             onClick={goPrev}
             disabled={prevDisabled}
@@ -225,7 +225,7 @@ export function TeamSection({ section }) {
 
           <button
             type="button"
-            className="carousel-btn carousel-btn-next flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-gray-600 bg-white transition-all hover:bg-primary-500-alpha disabled:cursor-not-allowed disabled:opacity-50 max-md:h-8 max-md:w-8"
+            className="carousel-btn carousel-btn-next flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border border-solid border-gray-600 bg-white transition-all hover:bg-primary-500-alpha disabled:cursor-not-allowed disabled:opacity-50 max-md:h-8 max-md:w-8"
             aria-label="Next"
             onClick={goNext}
             disabled={nextDisabled}

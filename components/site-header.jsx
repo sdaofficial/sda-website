@@ -134,7 +134,7 @@ export function SiteHeader() {
       </header>
 
       <div
-        className={`mobile-menu-overlay fixed inset-0 z-[12] flex-col overflow-y-auto bg-white px-6 py-4 md:hidden ${menuOpen ? 'flex' : 'hidden'}`}
+        className={`mobile-menu-overlay fixed inset-0 z-50 flex-col overflow-y-auto bg-white px-6 py-4 md:hidden ${menuOpen ? 'flex' : 'hidden'}`}
         role="presentation"
         onClick={(e) => {
           if (e.target === e.currentTarget) closeMenu();

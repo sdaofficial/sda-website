@@ -15,7 +15,7 @@ function cn(...parts) {
 }
 
 const carouselNavButtonClass =
-  'z-10 border border-gray-300 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-transparent transition-all hover:bg-primary-500-alpha focus:outline-none disabled:cursor-not-allowed disabled:opacity-50';
+  'z-10 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-solid border-gray-300 bg-transparent transition-all hover:bg-primary-500-alpha focus:outline-none disabled:cursor-not-allowed disabled:opacity-50';
 
 const trackBase =
   'flex w-full flex-nowrap [scrollbar-width:none] [&::-webkit-scrollbar]:hidden *:w-[calc(100%/2)] *:shrink-0 *:grow';
